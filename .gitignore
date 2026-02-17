@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+env/
+.ipynb_checkpoints/
+
+# LaTeX generated files (keep the .tex, ignore the build)
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+paper/main.pdf  # Optional: ignore the PDF if you want to force users to build it
+
+# Data (Ignore large files)
+data/raw/*.csv
+data/processed/
+!data/raw/.gitkeep  # Keep the folder structure even if empty
