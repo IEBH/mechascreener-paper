@@ -34,6 +34,7 @@ To build this paper, you need the following software installed on your system:
 * **Python 3.8+**
 * **GNU Make**
 * **LaTeX Distribution** (TeX Live recommended)
+* **latexmk** (for automated LaTeX builds)
 
 ### Linux (Debian/Ubuntu/Pop!_OS) Setup
 
@@ -41,7 +42,7 @@ If you are missing any dependencies, you can install them via:
 
 ```bash
 sudo apt update
-sudo apt install python3-venv make texlive-latex-extra texlive-science texlive-bibtex-extra
+sudo apt install python3-venv make texlive-latex-extra texlive-science texlive-bibtex-extra latexmk
 ```
 
 ## 🚀 Installation
@@ -86,7 +87,7 @@ make
 
 ## 📊 Data Availability
 
-* The raw data is included in this repository under `data/raw`.
+* The raw data is included in this repository under `data`.
 
 ## 📄 License
 
@@ -96,3 +97,7 @@ make
 ## 📞 Contact
 
 For questions regarding the code or data, please open an issue in this repository or contact Connor Forbes at [cforbes@bond.edu.au](mailto:cforbes@bond.edu.au?subject=Mechascreener%20Paper%20Enquiry).
+
+## 💡 Editor Tip
+
+If using **VS Code**, install the **LaTeX Workshop** extension. It is configured to use `latexmk`, which matches this project's build pipeline.
