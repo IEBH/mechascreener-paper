@@ -10,7 +10,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
-\usepackage{graphicx} % Added to include the figure
+\usepackage{graphicx}
 
 % Author affil
 \usepackage{authblk}
@@ -33,7 +33,7 @@
 \maketitle
 
 \begin{abstract}
-The screening of thousands of articles is the primary bottleneck in the systematic review (SR) process. This paper presents \textbf{MechaScreener}, an automated screening tool that utilises a Large Language Model (LLM) to rank article relevance based on PICOT or general eligibility criteria. Using an LLM, we developed a scoring mechanism (1--5) to triage references. Our evaluation across 15 diverse reference libraries demonstrates that MechaScreener achieves a perfect mean recall of 1.00 (100\%) while maintaining an overall mean specificity of 0.61. This effectively reduces the manual screening workload by over 60\% without missing any relevant studies.
+The screening of thousands of articles is the primary bottleneck in the systematic review (SR) process. This paper presents \textbf{MechaScreener}, an automated screening tool that utilises a Large Language Model (LLM) to rank article relevance based on PICOT or general eligibility criteria. Using an LLM, we developed a scoring mechanism (1--5) to triage references. Our evaluation across 10 diverse reference libraries demonstrates that MechaScreener achieves a perfect mean recall of 1.00 (100\%) while maintaining an overall mean specificity of 0.61. This effectively reduces the manual screening workload by over 60\% without missing any relevant studies.
 \end{abstract}
 
 \section{Introduction}
@@ -80,15 +80,14 @@ The performance of MechaScreener is evaluated primarily using two metrics: recal
 \subsection{Development Results}
 Five libraries were used for development to maximise recall (number of references correctly included) and specificity (number of references correctly excluded). The developmental results for these libraries are presented in Table \ref{tab:development-results}, with recall and specificity metrics for each library in Table \ref{tab:development-mean-results}.
 
-% --- INSERT DEVELOPMENT TABLE ---
-\begin{table}[h]
+\begin{table}[hp]
 \centering
 \caption{Results Across 5 Development Libraries}
 \label{tab:development-results}
 \input{tables/results_table_development.tex}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[hp]
 \centering
 \caption{Mean Statistics for MechaScreener Across 5 Development Libraries}
 \label{tab:development-mean-results}
@@ -99,7 +98,7 @@ Five libraries were used for development to maximise recall (number of reference
 
 Ten reference libraries were used for evaluation of performance of Mechascreener. These ten libraries include a diverse range of topics shown below (5 studies that were RCTs and 5 studies that were non-RCTs).
 
-\begin{table}[h]
+\begin{table}[hp]
 \centering
 \caption{Overview of References and Missing Abstracts in Evaluation Libraries}
 \label{tab:missing-abstracts}
@@ -109,7 +108,7 @@ Ten reference libraries were used for evaluation of performance of Mechascreener
 \section{Results}
 MechaScreener was tested across 10 evaluation libraries containing a total of over 58,000 references. Figure \ref{fig:evaluation-results} summarises the performance metrics visually across each library and highlights the overall average for the evaluation set.
 
-\begin{figure}[h]
+\begin{figure}[hp]
 \centering
 \includegraphics[width=\textwidth]{figures/evaluation_results_figure.png}
 \caption{Recall and Specificity across 10 Evaluation Libraries, including the overall Mean.}
@@ -120,8 +119,7 @@ Within the evaluation dataset, the system achieved a perfect mean recall score (
 
 An individual breakdown of each evaluation library is presented in Table \ref{tab:evaluation-results}.
 
-% --- INSERT EVALUATION TABLE ---
-\begin{table}[h]
+\begin{table}[hp]
 \centering
 \caption{Results Across 10 Evaluation Libraries}
 \label{tab:evaluation-results}
