@@ -321,13 +321,18 @@ def generate_results_figure(results_list, mean_recall, mean_specificity, output_
 
     # Append 4-decimal place rotated data labels precisely above bars
     def autolabel(rects):
-        for rect in rects:
+        for i, rect in enumerate(rects):
             height = rect.get_height()
+
+            # Check if this is the last bar ("Overall Mean")
+            weight = 'bold' if i == len(rects) - 1 else 'normal'
+
             ax.annotate(f'{height:.4f}',
                         xy=(rect.get_x() + rect.get_width() / 2, height),
                         xytext=(0, 4),  # 4 points vertical offset
                         textcoords="offset points",
-                        ha='center', va='bottom', rotation=90, fontsize=9)
+                        ha='center', va='bottom', rotation=90, fontsize=9,
+                        fontweight=weight) # Apply the dynamic fontweight here
 
     autolabel(rects1)
     autolabel(rects2)
