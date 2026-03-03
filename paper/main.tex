@@ -33,7 +33,7 @@
 \maketitle
 
 \begin{abstract}
-The screening of thousands of articles is the primary bottleneck in the systematic review (SR) process. This paper presents \textbf{MechaScreener}, an automated screening tool that utilizes a Large Language Model (LLM) to rank article relevance based on PICOT or general eligibility criteria. Using an LLM, we developed a scoring mechanism (1--5) to triage references. Our evaluation across 15 diverse research libraries demonstrates that MechaScreener achieves a mean recall of 1.00 (100\%) while maintaining a mean specificity of 0.62, effectively reducing the manual screening workload by over 60\% without missing relevant studies.
+The screening of thousands of articles is the primary bottleneck in the systematic review (SR) process. This paper presents \textbf{MechaScreener}, an automated screening tool that utilizes a Large Language Model (LLM) to rank article relevance based on PICOT or general eligibility criteria. Using an LLM, we developed a scoring mechanism (1--5) to triage references. Our evaluation across 15 diverse research libraries demonstrates that MechaScreener achieves a perfect mean recall of 1.00 (100\%) while maintaining an overall mean specificity of 0.61. This effectively reduces the manual screening workload by over 60\% without missing any relevant studies.
 \end{abstract}
 
 \section{Introduction}
@@ -57,8 +57,8 @@ The model is instructed to provide a score from 1 (low probability of inclusion)
 \subsection{Experimental Design}
 The evaluation of MechaScreener was conducted in two phases:
 \begin{itemize}
-    \item \textbf{Development Datasets} Five libraries used to calibrate the prompt and scoring threshold to maximize recall and specificity.
-    \item \textbf{Evaluation Dataset:} Ten additional libraries used for independent validation of the tool's performance across different medical and social science domains (e.g., COVID-19, diabetes, bone health). This includes 5 SR's that were looking for Randomized Controlled Trials (RCTs) and five SR's that were looking at non-RCT studies.
+    \item \textbf{Development Dataset:} Five libraries used to calibrate the prompt and scoring threshold to maximize recall and specificity.
+    \item \textbf{Evaluation Dataset:} Ten additional libraries used for independent validation of the tool's performance across different medical and social science domains (e.g., COVID-19, diabetes, bone health). This includes 5 SRs that were looking for Randomized Controlled Trials (RCTs) and 5 SRs that were looking at non-RCT studies.
 \end{itemize}
 
 Any references missing abstract data were excluded from the evaluation.
@@ -107,7 +107,7 @@ Ten reference libraries were used for evaluation of performance of Mechascreener
 \end{table}
 
 \section{Results}
-MechaScreener was tested across 10 evaluation libraries containing a total of several thousand references. Figure \ref{fig:evaluation-results} summarizes the performance metrics visually across each library and highlights the overall average.
+MechaScreener was tested across 10 evaluation libraries containing a total of over 58,000 references. Figure \ref{fig:evaluation-results} summarizes the performance metrics visually across each library and highlights the overall average for the evaluation set.
 
 \begin{figure}[h]
 \centering
@@ -116,9 +116,9 @@ MechaScreener was tested across 10 evaluation libraries containing a total of se
 \label{fig:evaluation-results}
 \end{figure}
 
-The system achieved a perfect recall score ($1.0$) across all 15 libraries, meaning no relevant articles were missed by the tool. The specificity of $0.6234$ indicates that MechaScreener was able to correctly exclude 62.3\% of irrelevant articles, significantly narrowing the pool for human review.
+Within the evaluation dataset, the system achieved a perfect mean recall score ($1.0000$), meaning no relevant articles were missed by the tool. The mean specificity was $0.6095$, indicating that MechaScreener correctly excluded 61.0\% of irrelevant articles, significantly narrowing the pool for human review.
 
-An individual breakdown of each library is presented in Table \ref{tab:evaluation-results}.
+An individual breakdown of each evaluation library is presented in Table \ref{tab:evaluation-results}.
 
 % --- INSERT EVALUATION TABLE ---
 \begin{table}[h]
@@ -131,7 +131,7 @@ An individual breakdown of each library is presented in Table \ref{tab:evaluatio
 \section{Discussion}
 In the context of SRs, recall is the most critical metric; missing a single relevant study can invalidate a review. Our results show that MechaScreener, when prompted with a structured 1--5 scoring system, can act as an effective "first-pass" filter.
 
-While the precision is low ($0.0363$), this is expected in SR screening where the prevalence of "include" studies is naturally very low compared to the total search results. The primary value of MechaScreener lies in its ability to safely remove $\sim$62\% of the noise while guaranteeing that all relevant literature remains in the set for the second stage of screening.
+The primary value of MechaScreener lies in its ability to safely remove 60--62\% of the noise while guaranteeing that all relevant literature remains in the set for the second stage of screening.
 
 \section{Conclusion}
 MechaScreener provides a reliable method for screening research articles. By leveraging large-scale LLMs and a probabilistic scoring approach, researchers can use MechaScreener to reduce their screening workload by more than half while maintaining the rigorous standards required for systematic literature synthesis.
