@@ -10,6 +10,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{graphicx} % Added to include the figure
 
 % Author affil
 \usepackage{authblk}
@@ -64,10 +65,20 @@ Any references missing abstract data were excluded from the evaluation.
 
 \subsection{Metrics}
 
-% TODO: Explain recall & specificity and their relevance
+The performance of MechaScreener is evaluated primarily using two metrics: recall and specificity.
+
+\textbf{Recall} (or sensitivity) measures the proportion of actual relevant studies that were correctly identified by the tool. In the context of systematic reviews, maximizing recall is paramount to ensure no critical literature is missed. It is defined as:
+\begin{equation}
+    \text{Recall} = \frac{\text{True Positives (TP)}}{\text{True Positives (TP)} + \text{False Negatives (FN)}}
+\end{equation}
+
+\textbf{Specificity} measures the proportion of irrelevant studies that were correctly excluded. A higher specificity indicates a greater reduction in the manual screening workload, as fewer irrelevant articles are passed to the human reviewers. It is defined as:
+\begin{equation}
+    \text{Specificity} = \frac{\text{True Negatives (TN)}}{\text{True Negatives (TN)} + \text{False Positives (FP)}}
+\end{equation}
 
 \subsection{Development Results}
-Five libraries were used for development to maximize recall (number of references correctly included) and specificity (number of references correctly excluded). The results for these libraries are presented below in Table \ref{tab:development-results}
+Five libraries were used for development to maximize recall (number of references correctly included) and specificity (number of references correctly excluded). The developmental results for these libraries are presented below in Table \ref{tab:development-results}. These results are presented in terms of recall and specificity below in Table \ref{tab:development-mean-results}.
 
 % --- INSERT DEVELOPMENT TABLE ---
 \begin{table}[h]
@@ -77,9 +88,18 @@ Five libraries were used for development to maximize recall (number of reference
 \input{tables/results_table_development.tex}
 \end{table}
 
+\begin{table}[h]
+\centering
+\caption{Mean Statistics for MechaScreener Across 5 Development Libraries}
+\label{tab:development-mean-results}
+\input{tables/mean_results_table_development.tex}
+\end{table}
+
 \subsection{Evaluation Dataset}
 
 Ten reference libraries were used for evaluation of performance of Mechascreener. These ten libraries include a diverse range of topics shown below (5 studies that were RCTs and 5 studies that were non-RCTs).
+
+% TODO: Complete representation of the RCT vs Non-RCT studies. Maybe a table generated in analysis.py with two sections (one for RCT, one for Non-RCT), which has two columns: the total number of refs, and the number of references with missing abstracts
 
 RCT Studies
 
@@ -94,24 +114,15 @@ Non-RCT Studies
 \end{enumerate}
 
 \section{Results}
-MechaScreener was tested across 15 libraries containing a total of several thousand references. Table \ref{tab:results} summarizes the performance metrics.
+MechaScreener was tested across 10 evaluation libraries containing a total of several thousand references. Figure \ref{fig:evaluation-results} summarizes the performance metrics visually across each library and highlights the overall average.
 
-\begin{table}[h]
+% TODO: Make "Overall Mean" in the below chart bold, plus use a scientific gridded figure style with labels showing the recall + specificity reading to 4 decimal places above the bar. Ideally this figure should be easily readable if the reader prints it in black and white.
+\begin{figure}[h]
 \centering
-\caption{Mean Statistics for MechaScreener Across 15 Research Libraries}
-\label{tab:results}
-\begin{tabular}{lc}
-\toprule
-\textbf{Metric} & \textbf{Value} \\
-\midrule
-Mean Recall & 1.0000 \\
-Mean Specificity & 0.6234 \\
-Mean Precision & 0.0363 \\
-Mean F1 Score & 0.0670 \\
-Mean Accuracy & 0.6267 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=\textwidth]{figures/evaluation_results_figure.png}
+\caption{Recall and Specificity across 10 Evaluation Libraries, including the overall Mean.}
+\label{fig:evaluation-results}
+\end{figure}
 
 The system achieved a perfect recall score ($1.0$) across all 15 libraries, meaning no relevant articles were missed by the tool. The specificity of $0.6234$ indicates that MechaScreener was able to correctly exclude 62.3\% of irrelevant articles, significantly narrowing the pool for human review.
 

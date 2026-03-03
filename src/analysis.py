@@ -2,11 +2,15 @@ import json
 import os
 from pathlib import Path
 import numpy as np
+import matplotlib.pyplot as plt
 
 # --- Configuration ---
 # Output paths
 TABLES_OUTPUT_DIR = Path("./paper/tables/")
+FIGURES_OUTPUT_DIR = Path("./paper/figures/")
+
 os.makedirs(TABLES_OUTPUT_DIR, exist_ok=True)
+os.makedirs(FIGURES_OUTPUT_DIR, exist_ok=True)
 
 # Base directories for data files
 PREDICTION_BASE_DIR = Path("./data/output_results")
@@ -181,7 +185,71 @@ def generate_latex_table(results_list, output_dir, dataset_name):
     with open(output_path, "w") as f:
         f.write(latex_content.strip())
 
-    print(f"  -> LaTeX table saved to: {output_path}")
+    print(f"  -> LaTeX breakdown table saved to: {output_path}")
+
+def generate_mean_summary_table(results_list, mean_recall, mean_specificity, output_dir, dataset_name):
+    """Generates a summary table with recall and specificity for each library, plus the overall mean."""
+
+    # Sort results by library name for consistent table order
+    sorted_results = sorted(results_list, key=lambda x: x['library_name'])
+
+    rows = []
+    for res in sorted_results:
+        lib_name = format_library_name(res['library_name'])
+        rows.append(f"{lib_name} & {res['recall']:.4f} & {res['specificity']:.4f} \\\\")
+
+    table_body = "\n".join(rows)
+
+    latex_content = fr"""
+\begin{{tabularx}}{{\textwidth}}{{@{{}} X r r @{{}}}}
+\toprule
+\textbf{{Library Name}} & \textbf{{Recall}} & \textbf{{Specificity}} \\
+\midrule
+{table_body}
+\midrule
+\textbf{{Mean}} & \textbf{{{mean_recall:.4f}}} & \textbf{{{mean_specificity:.4f}}} \\
+\bottomrule
+\end{{tabularx}}
+"""
+    filename = f"mean_results_table_{dataset_name.lower()}.tex"
+    output_path = output_dir / filename
+    with open(output_path, "w") as f:
+        f.write(latex_content.strip())
+
+    print(f"  -> LaTeX mean summary table saved to: {output_path}")
+
+def generate_results_figure(results_list, mean_recall, mean_specificity, output_dir, dataset_name):
+    """Generates a bar chart showing Recall and Specificity for each library + the overall mean."""
+    # Sort results by library name for consistent graph order
+    sorted_results = sorted(results_list, key=lambda x: x['library_name'])
+
+    labels = [format_library_name(res['library_name']) for res in sorted_results]
+    labels.append('Overall Mean')
+
+    recalls = [res['recall'] for res in sorted_results] + [mean_recall]
+    specificities = [res['specificity'] for res in sorted_results] + [mean_specificity]
+
+    x = np.arange(len(labels))
+    width = 0.35
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    rects1 = ax.bar(x - width/2, recalls, width, label='Recall', color='#2ca02c') # green
+    rects2 = ax.bar(x + width/2, specificities, width, label='Specificity', color='#1f77b4') # blue
+
+    ax.set_ylabel('Score')
+    ax.set_title(f'Recall and Specificity by Library ({dataset_name} Dataset)')
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, rotation=90, ha='right')
+    ax.legend(loc='lower left')
+    ax.set_ylim([0, 1.1])
+
+    fig.tight_layout()
+
+    output_path = output_dir / f"{dataset_name.lower()}_results_figure.png"
+    plt.savefig(output_path, dpi=300)
+    plt.close()
+
+    print(f"  -> Figure saved to: {output_path}")
 
 
 # --- Main execution loop ---
@@ -249,6 +317,11 @@ for dataset_name, library_list in datasets_to_process.items():
         print(f"  Mean Precision:          {mean_precision:.4f}")
         print(f"  Mean F1 Score:           {mean_f1_score:.4f}")
         print(f"  Mean Accuracy:           {mean_accuracy:.4f}")
+
+        # Update table outputs + figures
+        generate_mean_summary_table(latex_results, mean_recall, mean_specificity, TABLES_OUTPUT_DIR, dataset_name)
+        if dataset_name == "Evaluation":
+            generate_results_figure(latex_results, mean_recall, mean_specificity, FIGURES_OUTPUT_DIR, dataset_name)
 
     print("\n" + "="*50 + "\n")
 
