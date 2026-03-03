@@ -44,6 +44,20 @@ GROUND_TRUTH_SUFFIX = "references.json"
 
 # --- End Configuration ---
 
+def get_sort_key(library_name):
+    """Sort based on the exact index of the library in configuration arrays to ensure Non-RCT grouping at the end."""
+    if library_name in developmentLibraryNames:
+        return developmentLibraryNames.index(library_name)
+    if library_name in evaluationLibraryNames:
+        return evaluationLibraryNames.index(library_name)
+    return 999
+
+def format_library_name(name):
+    """Formats 'snake_case_name' to 'Snake Case Name' and drops 'non_rct_' prefix."""
+    if name.startswith("non_rct_"):
+        name = name[8:]
+    return name.replace("_", " ").title().replace(" And ", " and ").replace(" For ", " for ")
+
 def calculate_stats(prediction_file: Path, ground_truth_file: Path, threshold: int, library_name: str):
     """
     Calculates recall, specificity, precision, F1, and accuracy.
@@ -134,15 +148,66 @@ def calculate_stats(prediction_file: Path, ground_truth_file: Path, threshold: i
         'actual_negatives': actual_negatives
     }
 
-def format_library_name(name):
-    """Formats 'snake_case_name' to 'Snake Case Name'."""
-    return name.replace("_", " ").title().replace(" And ", " and ")
+def generate_missing_abstracts_table(output_dir):
+    """Generates a table splitting RCT and Non-RCT, counting total refs and missing abstracts."""
+    rct_rows = []
+    non_rct_rows = []
+
+    for lib in evaluationLibraryNames:
+        gt_file = GROUND_TRUTH_BASE_DIR / f"{lib}/{GROUND_TRUTH_SUFFIX}"
+        total = 0
+        missing = 0
+        try:
+            with open(gt_file, 'r') as f:
+                data = json.load(f)
+            total = len(data)
+            for ref_id, ref_data in data.items():
+                if isinstance(ref_data, dict):
+                    abstract = ref_data.get("abstract")
+                else:
+                    abstract = None
+
+                if not abstract or str(abstract).strip() == "":
+                    missing += 1
+        except Exception:
+            pass
+
+        name = format_library_name(lib)
+        row_str = f"{name} & {total:,} & {missing:,} \\\\"
+
+        if lib.startswith("non_rct_"):
+            non_rct_rows.append(row_str)
+        else:
+            rct_rows.append(row_str)
+
+    rct_body = "\n".join(rct_rows)
+    non_rct_body = "\n".join(non_rct_rows)
+
+    latex_content = fr"""
+\begin{{tabularx}}{{\textwidth}}{{@{{}} X r r @{{}}}}
+\toprule
+\textbf{{Library Name}} & \textbf{{Total References}} & \textbf{{Missing Abstracts}} \\
+\midrule
+\multicolumn{{3}}{{c}}{{\textbf{{RCT Studies}}}} \\
+\midrule
+{rct_body}
+\midrule
+\multicolumn{{3}}{{c}}{{\textbf{{Non-RCT Studies}}}} \\
+\midrule
+{non_rct_body}
+\bottomrule
+\end{{tabularx}}
+"""
+    output_path = output_dir / "missing_abstracts_table.tex"
+    with open(output_path, "w") as f:
+        f.write(latex_content.strip())
+    print(f"  -> LaTeX missing abstracts table saved to: {output_path}")
 
 def generate_latex_table(results_list, output_dir, dataset_name):
     """Generates and saves a LaTeX table based on the results."""
 
-    # Sort results by library name for consistent table order
-    results_list.sort(key=lambda x: x['library_name'])
+    # Sort results to group RCT vs Non-RCT logically by their order in arrays
+    results_list.sort(key=lambda x: get_sort_key(x['library_name']))
 
     rows = []
     for res in results_list:
@@ -190,8 +255,8 @@ def generate_latex_table(results_list, output_dir, dataset_name):
 def generate_mean_summary_table(results_list, mean_recall, mean_specificity, output_dir, dataset_name):
     """Generates a summary table with recall and specificity for each library, plus the overall mean."""
 
-    # Sort results by library name for consistent table order
-    sorted_results = sorted(results_list, key=lambda x: x['library_name'])
+    # Sort results
+    sorted_results = sorted(results_list, key=lambda x: get_sort_key(x['library_name']))
 
     rows = []
     for res in sorted_results:
@@ -220,8 +285,8 @@ def generate_mean_summary_table(results_list, mean_recall, mean_specificity, out
 
 def generate_results_figure(results_list, mean_recall, mean_specificity, output_dir, dataset_name):
     """Generates a bar chart showing Recall and Specificity for each library + the overall mean."""
-    # Sort results by library name for consistent graph order
-    sorted_results = sorted(results_list, key=lambda x: x['library_name'])
+    # Sort results
+    sorted_results = sorted(results_list, key=lambda x: get_sort_key(x['library_name']))
 
     labels = [format_library_name(res['library_name']) for res in sorted_results]
     labels.append('Overall Mean')
@@ -232,21 +297,45 @@ def generate_results_figure(results_list, mean_recall, mean_specificity, output_
     x = np.arange(len(labels))
     width = 0.35
 
-    fig, ax = plt.subplots(figsize=(12, 6))
-    rects1 = ax.bar(x - width/2, recalls, width, label='Recall', color='#2ca02c') # green
-    rects2 = ax.bar(x + width/2, specificities, width, label='Specificity', color='#1f77b4') # blue
+    fig, ax = plt.subplots(figsize=(12, 7))
+
+    # B&W/Print friendly hatched color styling
+    rects1 = ax.bar(x - width/2, recalls, width, label='Recall', color='#f0f0f0', edgecolor='black', hatch='//')
+    rects2 = ax.bar(x + width/2, specificities, width, label='Specificity', color='#a0a0a0', edgecolor='black', hatch='\\\\')
 
     ax.set_ylabel('Score')
     ax.set_title(f'Recall and Specificity by Library ({dataset_name} Dataset)')
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=90, ha='right')
-    ax.legend(loc='lower left')
-    ax.set_ylim([0, 1.1])
+    ax.set_xticklabels(labels, rotation=45, ha='right')
+
+    # Make "Overall Mean" bold on x-axis labels
+    for tick_label in ax.get_xticklabels():
+        if tick_label.get_text() == 'Overall Mean':
+            tick_label.set_fontweight('bold')
+
+    # Format graph grid layout
+    ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.35), ncol=2)
+    ax.set_ylim([0, 1.3])
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(True, linestyle='--', alpha=0.7, color='gray')
+
+    # Append 4-decimal place rotated data labels precisely above bars
+    def autolabel(rects):
+        for rect in rects:
+            height = rect.get_height()
+            ax.annotate(f'{height:.4f}',
+                        xy=(rect.get_x() + rect.get_width() / 2, height),
+                        xytext=(0, 4),  # 4 points vertical offset
+                        textcoords="offset points",
+                        ha='center', va='bottom', rotation=90, fontsize=9)
+
+    autolabel(rects1)
+    autolabel(rects2)
 
     fig.tight_layout()
 
     output_path = output_dir / f"{dataset_name.lower()}_results_figure.png"
-    plt.savefig(output_path, dpi=300)
+    plt.savefig(output_path, dpi=300, bbox_inches='tight')
     plt.close()
 
     print(f"  -> Figure saved to: {output_path}")
@@ -254,6 +343,11 @@ def generate_results_figure(results_list, mean_recall, mean_specificity, output_
 
 # --- Main execution loop ---
 print("Starting analysis for all libraries...\n")
+
+# Generate the missing abstracts table
+print("=== Generating Context Tables ===")
+generate_missing_abstracts_table(TABLES_OUTPUT_DIR)
+print("")
 
 # Grouping datasets to loop through them easily
 datasets_to_process = {

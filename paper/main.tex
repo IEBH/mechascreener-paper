@@ -99,24 +99,16 @@ Five libraries were used for development to maximize recall (number of reference
 
 Ten reference libraries were used for evaluation of performance of Mechascreener. These ten libraries include a diverse range of topics shown below (5 studies that were RCTs and 5 studies that were non-RCTs).
 
-% TODO: Complete representation of the RCT vs Non-RCT studies. Maybe a table generated in analysis.py with two sections (one for RCT, one for Non-RCT), which has two columns: the total number of refs, and the number of references with missing abstracts
-
-RCT Studies
-
-\begin{enumerate}
-    \item Balneotherapy for Chronic Venous Insufficiency
-\end{enumerate}
-
-Non-RCT Studies
-
-\begin{enumerate}
-    \item Covid Schools
-\end{enumerate}
+\begin{table}[h]
+\centering
+\caption{Overview of References and Missing Abstracts in Evaluation Libraries}
+\label{tab:missing-abstracts}
+\input{tables/missing_abstracts_table.tex}
+\end{table}
 
 \section{Results}
 MechaScreener was tested across 10 evaluation libraries containing a total of several thousand references. Figure \ref{fig:evaluation-results} summarizes the performance metrics visually across each library and highlights the overall average.
 
-% TODO: Make "Overall Mean" in the below chart bold, plus use a scientific gridded figure style with labels showing the recall + specificity reading to 4 decimal places above the bar. Ideally this figure should be easily readable if the reader prints it in black and white.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{figures/evaluation_results_figure.png}
