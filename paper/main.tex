@@ -80,6 +80,7 @@ The performance of MechaScreener is evaluated primarily using two metrics: recal
 \subsection{Development Results}
 Five libraries were used for development to maximise recall (number of references correctly included) and specificity (number of references correctly excluded). The developmental results for these libraries are presented in Table \ref{tab:development-results}, with recall and specificity metrics for each library in Table \ref{tab:development-mean-results}.
 
+% TODO: Add citations for the 5 development libraries here
 \begin{table}[hp]
 \centering
 \caption{Results Across 5 Development Libraries}
@@ -98,6 +99,7 @@ Five libraries were used for development to maximise recall (number of reference
 
 Ten reference libraries were used for evaluation of performance of Mechascreener. These ten libraries include a diverse range of topics shown below (5 studies that were RCTs and 5 studies that were non-RCTs).
 
+% TODO: Add citations for the 10 evaluation libraries here
 \begin{table}[hp]
 \centering
 \caption{Overview of References and Missing Abstracts in Evaluation Libraries}
@@ -132,6 +134,7 @@ In the context of systematic reviews (SRs), recall is universally recognised as 
 The primary value of MechaScreener lies in its ability to consistently maintain a perfect mean recall ($1.0000$) across all evaluated libraries while safely removing an average of approximately 61\% of the irrelevant literature (mean specificity of $0.6095$). This translates to a substantial reduction in the manual screening workload for researchers, reallocating valuable time and human resources towards downstream tasks such as full-text review, data extraction, and risk of bias assessment.
 
 \subsection{Performance Variance and Specificity}
+% TODO: Elaborate on this
 While the recall remained stable at 100\% across both the development and evaluation datasets, we observed notable variance in specificity depending on the systematic review topic. For instance, highly specific pharmacological interventions such as \textit{Phosphodiesterase 5 Inhibitors} achieved a specificity of 0.9145, effectively eliminating over 90\% of irrelevant studies. Conversely, broader or more complex topics, particularly those involving non-randomised controlled trials (non-RCTs) like \textit{Covid Schools} or \textit{Diabetes Tb}, exhibited lower specificities (0.2080 and 0.3925, respectively).
 
 This variance can likely be attributed to the inherent ambiguity in the abstracts of complex, observational, or socially oriented studies compared to standard clinical RCTs. When abstract information is vague, poorly structured, or lacks explicit PICOT (Population, Intervention, Comparison, Outcome, Time) details, MechaScreener conservatively assigns a higher probability of inclusion to prevent the accidental exclusion of relevant studies.
