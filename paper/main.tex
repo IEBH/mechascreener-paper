@@ -37,12 +37,14 @@ The screening of thousands of articles is the primary bottleneck in the systemat
 \end{abstract}
 
 \section{Introduction}
+% TODO: Citation about time taken during screening
 Systematic reviews (SRs) require a comprehensive search of literature, often resulting in thousands of references that must be manually screened. Automated tools aim to reduce this burden. This study evaluates \textbf{MechaScreener}, an automated tool that leverages a Large Language Model (LLM) to evaluate the inclusion probability of references based on specific researcher-defined criteria.
 
 \section{Methods}
 
 \subsection{System Architecture}
-MechaScreener was developed using a Node.js/TypeScript environment. The system processes references in batches, extracting the title and abstract and pairing them with a user-provided screening criteria string (formatted as PICOT or general inclusion/exclusion rules).
+% TODO: Citation for PICOT
+MechaScreener was developed using a Node.js/TypeScript environment. The system processes references in batches, extracting the title and abstract and pairing them with a user-provided screening criteria string (formatted as Population, Intervention, Comparator, Outcome, Type of study (PICOT) criteria or general inclusion/exclusion rules).
 
 \subsection{Prompting and Scoring}
 The MechaScreener system utilises a structured prompt consisting of:
@@ -52,8 +54,7 @@ The MechaScreener system utilises a structured prompt consisting of:
     \item \textbf{Criteria:} The eligibility criteria for the specific review.
 \end{enumerate}
 
-% TODO: Definitions of temperature and top_k
-The model is instructed to provide a score from 1 (low probability of inclusion) to 5 (high probability of inclusion). We utilised a model with a \texttt{temperature} of 0 and \texttt{top\_k} of 1 to ensure deterministic, reproducible results.
+The model is instructed to provide a score from 1 (low probability of inclusion) to 5 (high probability of inclusion). To ensure the screening process is completely deterministic and highly reproducible for research purposes, we utilised a model configuration with a \texttt{temperature} of 0 and \texttt{top\_k} of 1, effectively forcing the model to always select the single most likely response. In the context of Large Language Models, \texttt{temperature} is a parameter that controls the randomness or creativity of the model's output distribution, while \texttt{top\_k} restricts the model to sample only from the $k$ most probable next tokens.
 
 \subsection{Experimental Design}
 The evaluation of MechaScreener was conducted in two phases:
@@ -135,10 +136,11 @@ In the context of systematic reviews (SRs), recall is universally recognised as 
 The primary value of MechaScreener lies in its ability to consistently maintain a perfect mean recall ($1.0000$) across all evaluated libraries while safely removing an average of approximately 61\% of the irrelevant literature (mean specificity of $0.6095$). This translates to a substantial reduction in the manual screening workload for researchers, reallocating valuable time and human resources towards downstream tasks such as full-text review, data extraction, and risk of bias assessment.
 
 \subsection{Performance Variance and Specificity}
-% TODO: Elaborate on this
-While the recall remained stable at 100\% across both the development and evaluation datasets, we observed notable variance in specificity depending on the systematic review topic. For instance, highly specific pharmacological interventions such as \textit{Phosphodiesterase 5 Inhibitors} achieved a specificity of 0.9145, effectively eliminating over 90\% of irrelevant studies. Conversely, broader or more complex topics, particularly those involving non-randomised controlled trials (non-RCTs) like \textit{Covid Schools} or \textit{Diabetes Tb}, exhibited lower specificities (0.2080 and 0.3925, respectively).
+While the recall remained stable at 100\% across both the development and evaluation datasets, we observed notable variance in specificity depending on the systematic review topic and study design. This variance demonstrates that the LLM's capacity to confidently discard irrelevant literature is highly dependent on the precision of the research question and the standardisation of the field's terminology.
 
-This variance can likely be attributed to the inherent ambiguity in the abstracts of complex, observational, or socially oriented studies compared to standard clinical RCTs. When abstract information is vague, poorly structured, or lacks explicit PICOT (Population, Intervention, Comparison, Outcome, Time) details, MechaScreener conservatively assigns a higher probability of inclusion to prevent the accidental exclusion of relevant studies.
+For instance, highly specific pharmacological interventions such as \textit{Phosphodiesterase 5 Inhibitors}\cite{phosphodiestrase_5_inhibitors} achieved a specificity of 0.9145, effectively eliminating over 90\% of irrelevant studies. Clinical trials in these domains typically feature highly structured abstracts and unambiguous PICOT elements, allowing the LLM to easily detect off-target papers.
+
+Conversely, broader or more complex topics, particularly those involving non-randomised controlled trials (non-RCTs) like \textit{Covid Schools}\cite{non_rct_covid_schools} or \textit{Diabetes Tb}\cite{non_rct_diabetes_tb}, exhibited lower specificities (0.2080 and 0.3925, respectively). These public health and observational fields often involve diverse study designs, varied outcome measures, and less structured reporting. When abstract information is vague, lacks explicit PICOT details, or touches on related thematic concepts without matching precise criteria, MechaScreener conservatively assigns a higher probability of inclusion. This built-in conservatism prevents the accidental exclusion of relevant studies, correctly prioritising a perfect recall over maximal workload reduction when faced with ambiguity.
 
 \subsection{Limitations}
 Despite the robust performance, several limitations must be acknowledged. First, the current methodology relies heavily on the availability of study abstracts. As highlighted in Table \ref{tab:missing-abstracts}, thousands of references across the tested libraries (e.g., over 2,500 in the \textit{Fluoride Fluorosis} library) lacked abstract data. Studies without abstracts are inherently difficult to screen automatically and often default to human review, reducing the overall workload savings.
