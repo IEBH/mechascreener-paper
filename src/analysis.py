@@ -38,6 +38,25 @@ evaluationLibraryNames = [
     "non_rct_sanitation_diarrhoea",
 ]
 
+# Map libraries to their BibTeX citation keys
+CITATION_MAP = {
+    "antibiotic_prescribing_and_telehealth": "antibiotic_prescribing_and_telehealth",
+    "long_covid": "long_covid",
+    "natural_history_primary_care": "natural_history_primary_care",
+    "non_drug_interventions": "non_drug_interventions",
+    "salt_substitution": "salt_substitution",
+    "balneotherapy_for_chronic_venous": "balneotherapy_for_chronic_venous",
+    "calcium_vitamin_d_for_bones": "calcium_vitamin_d_for_bones",
+    "methylxanthine_for_apnea": "methylxanthine_for_apnea",
+    "phosphodiestrase_5_inhibitors": "phosphodiestrase_5_inhibitors",
+    "topical_and_oral_steroids_for_om": "topical_and_oral_steroids_for_om",
+    "non_rct_covid_schools": "non_rct_covid_schools",
+    "non_rct_diabetes_tb": "non_rct_diabetes_tb",
+    "non_rct_falls_prevention": "non_rct_falls_prevention",
+    "non_rct_fluoride_fluorosis": "non_rct_fluoride_fluorosis",
+    "non_rct_sanitation_diarrhoea": "non_rct_sanitation_diarrhoea",
+}
+
 # Prediction filename pattern components
 PREDICTION_SUFFIX = ".json"
 GROUND_TRUTH_SUFFIX = "references.json"
@@ -173,6 +192,11 @@ def generate_missing_abstracts_table(output_dir):
             pass
 
         name = format_library_name(lib)
+
+        # Insert citations for evaluation libraries in the missing abstracts table
+        if lib in CITATION_MAP:
+            name += f"~\\cite{{{CITATION_MAP[lib]}}}"
+
         row_str = f"{name} & {total:,} & {missing:,} \\\\"
 
         if lib.startswith("non_rct_"):
@@ -211,7 +235,13 @@ def generate_latex_table(results_list, output_dir, dataset_name):
 
     rows = []
     for res in results_list:
-        lib_name = format_library_name(res['library_name'])
+        raw_lib_name = res['library_name']
+        lib_name = format_library_name(raw_lib_name)
+
+        # Insert citations for development libraries in the results table
+        if dataset_name == "Development" and raw_lib_name in CITATION_MAP:
+            lib_name += f"~\\cite{{{CITATION_MAP[raw_lib_name]}}}"
+
         total = res['total_refs']
 
         # Format: TP/TotalPositives

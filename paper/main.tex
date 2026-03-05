@@ -52,6 +52,7 @@ The MechaScreener system utilises a structured prompt consisting of:
     \item \textbf{Criteria:} The eligibility criteria for the specific review.
 \end{enumerate}
 
+% TODO: Definitions of temperature and top_k
 The model is instructed to provide a score from 1 (low probability of inclusion) to 5 (high probability of inclusion). We utilised a model with a \texttt{temperature} of 0 and \texttt{top\_k} of 1 to ensure deterministic, reproducible results.
 
 \subsection{Experimental Design}
@@ -60,6 +61,8 @@ The evaluation of MechaScreener was conducted in two phases:
     \item \textbf{Development Dataset:} Five reference libraries were used to calibrate the prompt and scoring threshold to maximise recall and specificity.
     \item \textbf{Evaluation Dataset:} Ten additional reference libraries were used for independent validation of the tool's performance across different medical and social science domains (e.g., COVID-19, diabetes, bone health). This includes 5 SRs that were looking for Randomised Controlled Trials (RCTs) and 5 SRs that were looking at non-RCT studies.
 \end{itemize}
+
+The 10 evaluation studies were sourced from previous Cochrane reviews. \textcolor{red}{Justin: Can you please write a brief methodology for how the Cochrane datasets were sourced/compiled.}
 
 Any references missing abstract data were excluded from the evaluation.
 
@@ -78,9 +81,8 @@ The performance of MechaScreener is evaluated primarily using two metrics: recal
 \end{equation}
 
 \subsection{Development Results}
-Five libraries were used for development to maximise recall (number of references correctly included) and specificity (number of references correctly excluded). The developmental results for these libraries are presented in Table \ref{tab:development-results}, with recall and specificity metrics for each library in Table \ref{tab:development-mean-results}.
+Five libraries were used for development to maximise recall (number of references correctly included) and specificity (number of references correctly excluded). These libraries were compiled based on previous reviews conducted at the Institute for Evidence-Based Healthcare (IEBH). The developmental results for these libraries are presented in Table \ref{tab:development-results}, with recall and specificity metrics for each library in Table \ref{tab:development-mean-results}.
 
-% TODO: Add citations for the 5 development libraries here
 \begin{table}[hp]
 \centering
 \caption{Results Across 5 Development Libraries}
@@ -99,7 +101,6 @@ Five libraries were used for development to maximise recall (number of reference
 
 Ten reference libraries were used for evaluation of performance of Mechascreener. These ten libraries include a diverse range of topics shown below (5 studies that were RCTs and 5 studies that were non-RCTs).
 
-% TODO: Add citations for the 10 evaluation libraries here
 \begin{table}[hp]
 \centering
 \caption{Overview of References and Missing Abstracts in Evaluation Libraries}
@@ -155,5 +156,9 @@ The dataset, source code for the analysis, along with the scripts used to genera
 \begin{center}
     \url{https://github.com/IEBH/mechascreener-paper}
 \end{center}
+
+% Bibliography
+\bibliographystyle{unsrt} % Numbered citations in order of appearance
+\bibliography{references}
 
 \end{document}
