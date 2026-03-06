@@ -37,8 +37,7 @@ The screening of thousands of articles is the primary bottleneck in the systemat
 \end{abstract}
 
 \section{Introduction}
-% TODO: Citation about time taken during screening
-Systematic reviews (SRs) require a comprehensive search of literature, often resulting in thousands of references that must be manually screened. Automated tools aim to reduce this burden. This study evaluates \textbf{MechaScreener}, an automated tool that leverages a Large Language Model (LLM) to evaluate the inclusion probability of references based on specific researcher-defined criteria.
+Systematic reviews (SRs) require a comprehensive search of literature, often resulting in thousands of references that must be manually screened. Screening speed varies based on the team working on the review, the criteria and the software used, but can range from 60-300 references an hour \cite{bramer_reviewing_2017}. Automated tools aim to reduce this burden by estimating the relevance of references for a given review. Large Language Models (LLMs) appear to be a promising method to achieve this, however recall continues to be a limiting factor \cite{delgado-chaves_transforming_2025}. To effectively automate screening, recall (the number of relevant studies included) needs to be near 1.00 (meaning all relevant studies were correctly identified). This study evaluates \textbf{MechaScreener}, an automated tool that leverages a LLM to evaluate the inclusion probability of references based on specific researcher-defined criteria.
 
 \section{Methods}
 
