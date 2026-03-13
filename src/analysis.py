@@ -244,15 +244,17 @@ def generate_latex_table(results_list, output_dir, dataset_name):
 
         total = res['total_refs']
 
-        # Format: TP/TotalPositives
+        # Format: TP/TotalPositives (XX%)
         tp = res['true_positives']
         total_pos = res['actual_positives']
-        inc_col = f"{tp}/{total_pos}"
+        inc_pct = round((tp / total_pos) * 100) if total_pos > 0 else 0
+        inc_col = f"{tp}/{total_pos} ({inc_pct}\\%)"
 
-        # Format: TN/TotalNegatives
+        # Format: TN/TotalNegatives (XX%)
         tn = res['true_negatives']
         total_neg = res['actual_negatives']
-        exc_col = f"{tn:,}/{total_neg:,}"
+        exc_pct = round((tn / total_neg) * 100) if total_neg > 0 else 0
+        exc_col = f"{tn:,}/{total_neg:,} ({exc_pct}\\%)"
 
         # Construct row
         rows.append(f"{lib_name} & {total:,} & {inc_col} & {exc_col} \\\\")
