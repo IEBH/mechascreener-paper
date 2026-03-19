@@ -1,5 +1,29 @@
 \begin{thebibliography}{10}
 
+\bibitem{clark_full_2020}
+Justin Clark, Paul Glasziou, Chris Del~Mar, Alexandra Bannach-Brown, Paulina
+  Stehlik, and Anna~Mae Scott.
+\newblock A full systematic review was completed in 2 weeks using automation
+  tools: a case study.
+\newblock {\em Journal of Clinical Epidemiology}, 121:81--90, May 2020.
+
+\bibitem{borah_analysis_2017}
+Rohit Borah, Andrew~W. Brown, Patrice~L. Capers, and Kathryn~A. Kaiser.
+\newblock Analysis of the time and workers needed to conduct systematic reviews
+  of medical interventions using data from the {PROSPERO} registry.
+\newblock {\em BMJ open}, 7(2):e012545, February 2017.
+
+\bibitem{page_prisma_2021}
+Matthew~J. Page, Joanne~E. McKenzie, Patrick~M. Bossuyt, Isabelle Boutron,
+  Tammy~C. Hoffmann, Cynthia~D. Mulrow, Larissa Shamseer, Jennifer~M. Tetzlaff,
+  Elie~A. Akl, Sue~E. Brennan, Roger Chou, Julie Glanville, Jeremy~M. Grimshaw,
+  Asbjørn Hróbjartsson, Manoj~M. Lalu, Tianjing Li, Elizabeth~W. Loder, Evan
+  Mayo-Wilson, Steve McDonald, Luke~A. McGuinness, Lesley~A. Stewart, James
+  Thomas, Andrea~C. Tricco, Vivian~A. Welch, Penny Whiting, and David Moher.
+\newblock The {PRISMA} 2020 statement: an updated guideline for reporting
+  systematic reviews.
+\newblock {\em BMJ (Clinical research ed.)}, 372:n71, March 2021.
+
 \bibitem{bramer_reviewing_2017}
 Wichor~M. Bramer, Jelena Milic, and Frans Mast.
 \newblock Reviewing retrieved references for inclusion in systematic reviews
@@ -14,6 +38,20 @@ Fernando~M. Delgado-Chaves, Matthew~J. Jennings, Antonio Atalaia, Justus Wolff,
   language models in systematic reviews.
 \newblock {\em Proceedings of the National Academy of Sciences},
   122(2):e2411962122, January 2025.
+
+\bibitem{clark_generative_2025}
+Justin Clark, Belinda Barton, Loai Albarqouni, Oyungerel Byambasuren, Tanisha
+  Jowsey, Justin Keogh, Tian Liang, Christian Moro, Hayley O'Neill, and Mark
+  Jones.
+\newblock Generative artificial intelligence use in evidence synthesis: {A}
+  systematic review.
+\newblock {\em Research Synthesis Methods}, 16(4):601--619, July 2025.
+
+\bibitem{noauthor_tera_nodate}
+Institute for Evidence Based~Healthcare.
+\newblock {TERA} {Mechascreener}.
+\newblock \url{https://tera-tools.com/mechascreener}.
+\newblock Accessed: 2026-03-19.
 
 \bibitem{speckman_asking_2019}
 Rebecca~A. Speckman and Janna~L. Friedly.
