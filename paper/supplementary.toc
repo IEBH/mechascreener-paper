@@ -1,0 +1,18 @@
+\contentsline {section}{\numberline {1}Development Libraries}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Antibiotic Prescribing and Telehealth}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Long COVID}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Natural History of Primary Care}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Non-Drug Interventions}{3}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Salt Substitution}{3}{subsection.1.5}%
+\contentsline {section}{\numberline {2}Evaluation Libraries (RCTs)}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Balneotherapy for Chronic Venous Insufficiency}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Calcium and Vitamin D for Increasing Bone Mineral Density in Premenopausal Women}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Methylxanthine for the Prevention and Treatment of Apnea in Preterm Infants}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Phosphodiesterase 5 Inhibitors (PDE5i) for the Treatment of Raynaud's Phenomenon}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Topical and Oral Steroids for Otitis Media with Effusion (OME) in Children}{5}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Evaluation Libraries (Non-RCTs)}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Covid-19 in Schools}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Diabetes TB}{5}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Falls Prevention}{5}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Fluoride and Fluorosis}{6}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Sanitation for Preventing Diarrhea}{6}{subsection.3.5}%
