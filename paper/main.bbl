@@ -1,178 +1,127 @@
 \begin{thebibliography}{10}
 
 \bibitem{clark_full_2020}
-Justin Clark, Paul Glasziou, Chris Del~Mar, Alexandra Bannach-Brown, Paulina
-  Stehlik, and Anna~Mae Scott.
-\newblock A full systematic review was completed in 2 weeks using automation
-  tools: a case study.
-\newblock {\em Journal of Clinical Epidemiology}, 121:81--90, May 2020.
+Clark Justin, Glasziou Paul, Del~Mar Chris, Bannach-Brown Alexandra, Stehlik
+  Paulina, Scott Anna~Mae. A full systematic review was completed in 2 weeks
+  using automation tools: a case study  {\it Journal of Clinical Epidemiology.
+  } 2020;121:81--90.
 
 \bibitem{borah_analysis_2017}
-Rohit Borah, Andrew~W. Brown, Patrice~L. Capers, and Kathryn~A. Kaiser.
-\newblock Analysis of the time and workers needed to conduct systematic reviews
-  of medical interventions using data from the {PROSPERO} registry.
-\newblock {\em BMJ open}, 7(2):e012545, February 2017.
+Borah Rohit, Brown Andrew~W., Capers Patrice~L., Kaiser Kathryn~A.. Analysis of
+  the time and workers needed to conduct systematic reviews of medical
+  interventions using data from the {PROSPERO} registry  {\it BMJ open. }
+  2017;7:e012545.
 
 \bibitem{page_prisma_2021}
-Matthew~J. Page, Joanne~E. McKenzie, Patrick~M. Bossuyt, Isabelle Boutron,
-  Tammy~C. Hoffmann, Cynthia~D. Mulrow, Larissa Shamseer, Jennifer~M. Tetzlaff,
-  Elie~A. Akl, Sue~E. Brennan, Roger Chou, Julie Glanville, Jeremy~M. Grimshaw,
-  Asbjørn Hróbjartsson, Manoj~M. Lalu, Tianjing Li, Elizabeth~W. Loder, Evan
-  Mayo-Wilson, Steve McDonald, Luke~A. McGuinness, Lesley~A. Stewart, James
-  Thomas, Andrea~C. Tricco, Vivian~A. Welch, Penny Whiting, and David Moher.
-\newblock The {PRISMA} 2020 statement: an updated guideline for reporting
-  systematic reviews.
-\newblock {\em BMJ (Clinical research ed.)}, 372:n71, March 2021.
+Page Matthew~J., McKenzie Joanne~E., Bossuyt Patrick~M., et al. The {PRISMA}
+  2020 statement: an updated guideline for reporting systematic reviews  {\it
+  BMJ (Clinical research ed.). } 2021;372:n71.
 
 \bibitem{bramer_reviewing_2017}
-Wichor~M. Bramer, Jelena Milic, and Frans Mast.
-\newblock Reviewing retrieved references for inclusion in systematic reviews
-  using {EndNote}.
-\newblock {\em Journal of the Medical Library Association: JMLA},
-  105(1):84--87, January 2017.
+Bramer Wichor~M., Milic Jelena, Mast Frans. Reviewing retrieved references for
+  inclusion in systematic reviews using {EndNote}  {\it Journal of the Medical
+  Library Association: JMLA. } 2017;105:84--87.
 
 \bibitem{delgado-chaves_transforming_2025}
-Fernando~M. Delgado-Chaves, Matthew~J. Jennings, Antonio Atalaia, Justus Wolff,
-  Rita Horvath, Zeinab~M. Mamdouh, Jan Baumbach, and Linda Baumbach.
-\newblock Transforming literature screening: {The} emerging role of large
-  language models in systematic reviews.
-\newblock {\em Proceedings of the National Academy of Sciences},
-  122(2):e2411962122, January 2025.
+Delgado-Chaves Fernando~M., Jennings Matthew~J., Atalaia Antonio, et al.
+  Transforming literature screening: {The} emerging role of large language
+  models in systematic reviews  {\it Proceedings of the National Academy of
+  Sciences. } 2025;122:e2411962122.
 
 \bibitem{clark_generative_2025}
-Justin Clark, Belinda Barton, Loai Albarqouni, Oyungerel Byambasuren, Tanisha
-  Jowsey, Justin Keogh, Tian Liang, Christian Moro, Hayley O'Neill, and Mark
-  Jones.
-\newblock Generative artificial intelligence use in evidence synthesis: {A}
-  systematic review.
-\newblock {\em Research Synthesis Methods}, 16(4):601--619, July 2025.
+Clark Justin, Barton Belinda, Albarqouni Loai, et al. Generative artificial
+  intelligence use in evidence synthesis: {A} systematic review  {\it Research
+  Synthesis Methods. } 2025;16:601--619.
 
 \bibitem{noauthor_tera_nodate}
-Institute for Evidence Based~Healthcare.
-\newblock {TERA} {Mechascreener}.
-\newblock \url{https://tera-tools.com/mechascreener}.
+Evidence Based~Healthcare Institute. {TERA} {Mechascreener}
+  \url{https://tera-tools.com/mechascreener}.
 \newblock Accessed: 2026-03-19.
 
 \bibitem{speckman_asking_2019}
-Rebecca~A. Speckman and Janna~L. Friedly.
-\newblock Asking {Structured}, {Answerable} {Clinical} {Questions} {Using} the
-  {Population}, {Intervention}/{Comparator}, {Outcome} ({PICO}) {Framework}.
-\newblock {\em PM\&R}, 11(5):548--553, May 2019.
+Speckman Rebecca~A., Friedly Janna~L.. Asking {Structured}, {Answerable}
+  {Clinical} {Questions} {Using} the {Population}, {Intervention}/{Comparator},
+  {Outcome} ({PICO}) {Framework}  {\it PM\&R. } 2019;11:548--553.
 
 \bibitem{antibiotic_prescribing_and_telehealth}
-Mina Bakhit, Emma Baillie, Natalia Krzyzaniak, Mieke van Driel, Justin Clark,
-  Paul Glasziou, and Christopher Del~Mar.
-\newblock Antibiotic prescribing for acute infections in synchronous telehealth
-  consultations: a systematic review and meta-analysis.
-\newblock {\em BJGP open}, 5(6):BJGPO.2021.0106, 2021.
+Bakhit Mina, Baillie Emma, Krzyzaniak Natalia, et al. Antibiotic prescribing
+  for acute infections in synchronous telehealth consultations: a systematic
+  review and meta-analysis  {\it BJGP open. } 2021;5:BJGPO.2021.0106.
 
 \bibitem{long_covid}
-Oyungerel Byambasuren, Paulina Stehlik, Justin Clark, Kylie Alcorn, and Paul
-  Glasziou.
-\newblock Effect of covid-19 vaccination on long covid: systematic review.
-\newblock {\em BMJ medicine}, 2(1):e000385, 2023.
+Byambasuren Oyungerel, Stehlik Paulina, Clark Justin, Alcorn Kylie, Glasziou
+  Paul. Effect of covid-19 vaccination on long covid: systematic review  {\it
+  BMJ medicine. } 2023;2:e000385.
 
 \bibitem{natural_history_primary_care}
-Kwame~Peprah Boaitey, Mina Bakhit, and Tammy~C. Hoffmann.
-\newblock Mapping the evidence about the natural history of acute infections
-  commonly seen in primary care and managed with antibiotics: a scoping review.
-\newblock {\em BMC infectious diseases}, 24(1):721, July 2024.
+Boaitey Kwame~Peprah, Bakhit Mina, Hoffmann Tammy~C.. Mapping the evidence
+  about the natural history of acute infections commonly seen in primary care
+  and managed with antibiotics: a scoping review  {\it BMC infectious diseases.
+  } 2024;24:721.
 
 \bibitem{non_drug_interventions}
-Hannah Greenwood, Alexandra~R. Davidson, Rae Thomas, and Loai Albarqouni.
-\newblock Common barriers and enablers to the use of non-drug interventions for
-  managing common chronic conditions in primary care: an overview of reviews.
-\newblock {\em BMC primary care}, 25(1):108, April 2024.
+Greenwood Hannah, Davidson Alexandra~R., Thomas Rae, Albarqouni Loai. Common
+  barriers and enablers to the use of non-drug interventions for managing
+  common chronic conditions in primary care: an overview of reviews  {\it BMC
+  primary care. } 2024;25:108.
 
 \bibitem{salt_substitution}
-Hannah Greenwood, Katelyn Barnes, Justin Clark, Lauren Ball, and Loai
-  Albarqouni.
-\newblock Long-{Term} {Effect} of {Salt} {Substitution} for {Cardiovascular}
-  {Outcomes} : {A} {Systematic} {Review} and {Meta}-analysis.
-\newblock {\em Annals of Internal Medicine}, 177(5):643--655, May 2024.
+Greenwood Hannah, Barnes Katelyn, Clark Justin, Ball Lauren, Albarqouni Loai.
+  Long-{Term} {Effect} of {Salt} {Substitution} for {Cardiovascular} {Outcomes}
+  : {A} {Systematic} {Review} and {Meta}-analysis  {\it Annals of Internal
+  Medicine. } 2024;177:643--655.
 
 \bibitem{balneotherapy_for_chronic_venous}
-Melissa~Andreia de~Moraes~Silva, Luis~Cu Nakano, Lígia~L. Cisneros, and Fausto
-  Miranda.
-\newblock Balneotherapy for chronic venous insufficiency.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 1(1):CD013085,
-  January 2023.
+Moraes~Silva Melissa~Andreia, Nakano Luis~Cu, Cisneros Lígia~L., Miranda
+  Fausto. Balneotherapy for chronic venous insufficiency  {\it The Cochrane
+  Database of Systematic Reviews. } 2023;1:CD013085.
 
 \bibitem{calcium_vitamin_d_for_bones}
-Lucía Méndez-Sánchez, Patricia Clark, Tania~M. Winzenberg, Peter Tugwell,
-  Paulina Correa-Burrows, and Rebecca Costello.
-\newblock Calcium and vitamin {D} for increasing bone mineral density in
-  premenopausal women.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 1(1):CD012664,
-  January 2023.
+Méndez-Sánchez Lucía, Clark Patricia, Winzenberg Tania~M., Tugwell Peter,
+  Correa-Burrows Paulina, Costello Rebecca. Calcium and vitamin {D} for
+  increasing bone mineral density in premenopausal women  {\it The Cochrane
+  Database of Systematic Reviews. } 2023;1:CD012664.
 
 \bibitem{methylxanthine_for_apnea}
-Keri~A. Marques, Matteo Bruschettini, Charles~C. Roehr, Peter~G. Davis,
-  Michelle Fiander, and Roger Soll.
-\newblock Methylxanthine for the prevention and treatment of apnea in preterm
-  infants.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 10(10):CD013830,
-  October 2023.
+Marques Keri~A., Bruschettini Matteo, Roehr Charles~C., Davis Peter~G., Fiander
+  Michelle, Soll Roger. Methylxanthine for the prevention and treatment of
+  apnea in preterm infants  {\it The Cochrane Database of Systematic Reviews. }
+  2023;10:CD013830.
 
 \bibitem{phosphodiestrase_5_inhibitors}
-Nancy Maltez, Lara~J. Maxwell, Fadumo Rirash, Elizabeth Tanjong~Ghogomu,
-  Sarah~E. Harding, Paul~C. Tingey, George~A. Wells, Peter Tugwell, and Janet
-  Pope.
-\newblock Phosphodiesterase 5 inhibitors ({PDE5i}) for the treatment of
-  {Raynaud}'s phenomenon.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 11(11):CD014089,
-  November 2023.
+Maltez Nancy, Maxwell Lara~J., Rirash Fadumo, et al. Phosphodiesterase 5
+  inhibitors ({PDE5i}) for the treatment of {Raynaud}'s phenomenon  {\it The
+  Cochrane Database of Systematic Reviews. } 2023;11:CD014089.
 
 \bibitem{topical_and_oral_steroids_for_om}
-Caroline~A. Mulvaney, Kevin Galbraith, Katie~E. Webster, Mridul Rana, Rachel
-  Connolly, Ben Tudor-Green, Tal Marom, Mat Daniel, Roderick~P. Venekamp,
-  Anne~Gm Schilder, and Samuel MacKeith.
-\newblock Topical and oral steroids for otitis media with effusion ({OME}) in
-  children.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 12(12):CD015255,
-  December 2023.
+Mulvaney Caroline~A., Galbraith Kevin, Webster Katie~E., et al. Topical and
+  oral steroids for otitis media with effusion ({OME}) in children  {\it The
+  Cochrane Database of Systematic Reviews. } 2023;12:CD015255.
 
 \bibitem{non_rct_covid_schools}
-Hannah Littlecott, Shari Krishnaratne, Jacob Burns, Eva Rehfuess, Kerstin Sell,
-  Carmen Klinger, Brigitte Strahwald, Ani Movsisyan, Maria-Inti Metzendorf,
-  Petra Schoenweger, Stephan Voss, Michaela Coenen, Roxana Müller-Eberstein,
-  and Lisa~M. Pfadenhauer.
-\newblock Measures implemented in the school setting to contain the {COVID}-19
-  pandemic.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 5(5):CD015029, May
-  2024.
+Littlecott Hannah, Krishnaratne Shari, Burns Jacob, et al. Measures implemented
+  in the school setting to contain the {COVID}-19 pandemic  {\it The Cochrane
+  Database of Systematic Reviews. } 2024;5:CD015029.
 
 \bibitem{non_rct_diabetes_tb}
-Juan~Va Franco, Brenda Bongaerts, Maria-Inti Metzendorf, Agostina Risso, Yang
-  Guo, Laura Peña~Silva, Melanie Boeckmann, Sabrina Schlesinger, Johanna~Aag
-  Damen, Bernd Richter, Annabel Baddeley, Mathieu Bastard, Anna Carlqvist,
-  Maria~Nieves Garcia-Casal, Bianca Hemmingsen, Farai Mavhunga, Jennifer
-  Manne-Goehler, and Kerri Viney.
-\newblock Diabetes as a risk factor for tuberculosis disease.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 8(8):CD016013,
-  August 2024.
+Franco Juan~Va, Bongaerts Brenda, Metzendorf Maria-Inti, et al. Diabetes as a
+  risk factor for tuberculosis disease  {\it The Cochrane Database of
+  Systematic Reviews. } 2024;8:CD016013.
 
 \bibitem{non_rct_falls_prevention}
-Sharon~R. Lewis, Lisa McGarrigle, Michael~W. Pritchard, Alessandro Bosco, Yang
-  Yang, Ashley Gluchowski, Jana Sremanakova, Elisabeth~R. Boulton, Matthew
-  Gittins, Anneliese Spinks, Kilian Rapp, Daniel~E. MacIntyre, Roderick~J.
-  McClure, and Chris Todd.
-\newblock Population-based interventions for preventing falls and fall-related
-  injuries in older people.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 1(1):CD013789,
-  January 2024.
+Lewis Sharon~R., McGarrigle Lisa, Pritchard Michael~W., et al. Population-based
+  interventions for preventing falls and fall-related injuries in older people
+  {\it The Cochrane Database of Systematic Reviews. } 2024;1:CD013789.
 
 \bibitem{non_rct_fluoride_fluorosis}
-May Chun~Mei Wong, Rui Zhang, Bella~Weijia Luo, Anne-Marie Glenny, Helen~V.
-  Worthington, and Edward Chin~Man Lo.
-\newblock Topical fluoride as a cause of dental fluorosis in children.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 6(6):CD007693,
-  June 2024.
+Wong May Chun~Mei, Zhang Rui, Luo Bella~Weijia, Glenny Anne-Marie, Worthington
+  Helen~V., Lo~Edward Chin~Man. Topical fluoride as a cause of dental fluorosis
+  in children  {\it The Cochrane Database of Systematic Reviews. }
+  2024;6:CD007693.
 
 \bibitem{non_rct_sanitation_diarrhoea}
-Valerie Bauza, Wenlu Ye, Jiawen Liao, Fiona Majorin, and Thomas Clasen.
-\newblock Interventions to improve sanitation for preventing diarrhoea.
-\newblock {\em The Cochrane Database of Systematic Reviews}, 1(1):CD013328,
-  January 2023.
+Bauza Valerie, Ye~Wenlu, Liao Jiawen, Majorin Fiona, Clasen Thomas.
+  Interventions to improve sanitation for preventing diarrhoea  {\it The
+  Cochrane Database of Systematic Reviews. } 2023;1:CD013328.
 
 \end{thebibliography}
