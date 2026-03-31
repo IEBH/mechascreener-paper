@@ -57,6 +57,15 @@ CITATION_MAP = {
     "non_rct_sanitation_diarrhoea": "non_rct_sanitation_diarrhoea",
 }
 
+# Optional map for custom display names in final outputs (tables and figures)
+DISPLAY_NAME_MAP = {
+    "non_rct_covid_schools": "COVID-19 Measures in Schools",
+    "non_rct_diabetes_tb": "Diabetes as a TB Risk Factor",
+    "non_rct_falls_prevention": "Falls Interventions",
+    "non_rct_fluoride_fluorosis": "Topical Fluoride causing Dental Fluorosis",
+    "non_rct_sanitation_diarrhoea": "Sanitation for Prevention Diarrhoea",
+}
+
 # Prediction filename pattern components
 PREDICTION_SUFFIX = ".json"
 GROUND_TRUTH_SUFFIX = "references.json"
@@ -72,7 +81,12 @@ def get_sort_key(library_name):
     return 999
 
 def format_library_name(name):
-    """Formats 'snake_case_name' to 'Snake Case Name' and drops 'non_rct_' prefix."""
+    """Formats library names, utilizing the custom DISPLAY_NAME_MAP if available."""
+    # Check custom name map first
+    if name in DISPLAY_NAME_MAP:
+        return DISPLAY_NAME_MAP[name]
+
+    # Fallback default formatting
     if name.startswith("non_rct_"):
         name = name[8:]
     return name.replace("_", " ").title().replace(" And ", " and ").replace(" For ", " for ")
@@ -346,8 +360,8 @@ def generate_results_figure(results_list, mean_recall, mean_specificity, output_
             tick_label.set_fontweight('bold')
 
     # Format graph grid layout
-    ax.legend(loc='lower center', bbox_to_anchor=(0.5, -0.35), ncol=2)
-    ax.set_ylim([0, 1.3])
+    ax.legend()
+    ax.set_ylim([0, 1.4])
     ax.set_axisbelow(True)
     ax.yaxis.grid(True, linestyle='--', alpha=0.7, color='gray')
 
