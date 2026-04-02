@@ -108,6 +108,12 @@ The performance of MechaScreener is evaluated primarily using two metrics: recal
     \text{Specificity} = \frac{\text{True Negatives (TN)}}{\text{True Negatives (TN)} + \text{False Positives (FP)}}
 \end{equation}
 
+\textbf{Wilson Score Confidence Interval (95\% CI)} is used to calculate the confidence bounds for recall and specificity. Standard Wald confidence intervals fail mathematically when proportions reach 0\% or 100\% (as seen with perfect recall). The Wilson Score Interval is robust for these extreme values. It is calculated as:
+\begin{equation}
+    \text{CI} = \frac{\hat{p} + \frac{z^2}{2n} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}
+\end{equation}
+where $\hat{p}$ is the observed proportion, $n$ is the total number of observations, and $z$ is the z-score (1.96 for a 95\% confidence level). \bigbreak
+
 \subsection{Development Results}
 Five control libraries were used for development to maximise recall (number of references correctly included) and specificity (number of references correctly excluded). These libraries were compiled based on previous reviews conducted at the Institute for Evidence-Based Healthcare (IEBH). The developmental results for these libraries are presented in Table \ref{tab:development-results}.
 
@@ -148,6 +154,15 @@ An individual breakdown of each evaluation library is presented in Table \ref{ta
 \caption{Results Across 10 Evaluation Libraries}
 \label{tab:evaluation-results}
 \input{tables/results_table_evaluation.tex}
+\end{table}
+
+Furthermore, we calculated the 95\% Wilson Score Confidence Intervals. Table \ref{tab:statistical-summary} presents these statistical measurements, alongside the macro-average (mean of proportions) and micro-average (pooled data) across all evaluation datasets.
+
+\begin{table}[ht]
+\centering
+\caption{Statistical Summary Across 10 Evaluation Libraries}
+\label{tab:statistical-summary}
+\input{tables/statistical_summary_evaluation.tex}
 \end{table}
 
 \section{Discussion}
