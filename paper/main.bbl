@@ -28,6 +28,12 @@ Delgado-Chaves Fernando~M., Jennings Matthew~J., Atalaia Antonio, et al.
   models in systematic reviews  {\it Proceedings of the National Academy of
   Sciences. } 2025;122:e2411962122.
 
+\bibitem{sanghera_high-performance_2025}
+Sanghera Rohan, Thirunavukarasu Arun~James, El~Khoury Marc, et al.
+  High-performance automated abstract screening with large language model
+  ensembles  {\it Journal of the American Medical Informatics Association:
+  {JAMIA}. } 2025;32:893--904.
+
 \bibitem{clark_generative_2025}
 Clark Justin, Barton Belinda, Albarqouni Loai, et al. Generative artificial
   intelligence use in evidence synthesis: {A} systematic review  {\it Research
@@ -37,6 +43,13 @@ Clark Justin, Barton Belinda, Albarqouni Loai, et al. Generative artificial
 Evidence Based~Healthcare Institute. {TERA} {Mechascreener}
   \url{https://tera-tools.com/mechascreener}.
 \newblock Accessed: 2026-03-19.
+
+\bibitem{ofori-boateng_enhancing_2024}
+Ofori-Boateng Regina, Trujillo-Escobar Tamy~Goretty, Aceves-Martins Magaly,
+  Wiratunga Nirmalie, Moreno-Garcia Carlos~Francisco. Enhancing systematic
+  reviews: An in-depth analysis on the impact of active learning parameter
+  combinations for biomedical abstract screening  {\it Artificial Intelligence
+  in Medicine. } 2024;157:102989.
 
 \bibitem{speckman_asking_2019}
 Speckman Rebecca~A., Friedly Janna~L.. Asking {Structured}, {Answerable}
