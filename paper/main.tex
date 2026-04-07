@@ -108,7 +108,7 @@ The performance of MechaScreener is evaluated primarily using two metrics: recal
     \text{Specificity} = \frac{\text{True Negatives (TN)}}{\text{True Negatives (TN)} + \text{False Positives (FP)}}
 \end{equation}
 
-\textbf{Wilson Score Confidence Interval (95\% CI)} is used to calculate the confidence bounds for recall and specificity. Standard Wald confidence intervals fail mathematically when proportions reach 0\% or 100\% (as seen with perfect recall). The Wilson Score Interval is robust for these extreme values. It is calculated as:
+\textbf{Wilson Score Confidence Interval (95\% CI)} is used to calculate the confidence bounds for recall and specificity. Standard Wald confidence intervals fail mathematically when proportions reach 0\% or 100\% (as seen with perfect recall). The Wilson Score Interval is robust for these extreme values \cite{wilson_probable_1927}. It is calculated as:
 \begin{equation}
     \text{CI} = \frac{\hat{p} + \frac{z^2}{2n} \pm z \sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}
 \end{equation}
