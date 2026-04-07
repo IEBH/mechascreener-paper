@@ -96,14 +96,14 @@ To compile the set of reviews used in the evaluation we reran searches from 10 r
 
 \subsection{Metrics}
 
-The performance of MechaScreener is evaluated primarily using two metrics: recall and specificity. \bigbreak
+The performance of MechaScreener is evaluated primarily using two metrics: recall (sensitivity) and specificity (selectivity). \bigbreak
 
 \textbf{Recall} (or sensitivity) measures the proportion of actual relevant studies that were correctly identified by the tool. In the context of systematic reviews, maximising recall is paramount to ensure no critical literature is missed. It is defined as:
 \begin{equation}
     \text{Recall} = \frac{\text{True Positives (TP)}}{\text{True Positives (TP)} + \text{False Negatives (FN)}}
 \end{equation}
 
-\textbf{Specificity} measures the proportion of irrelevant studies that were correctly excluded. A higher specificity indicates a greater reduction in the manual screening workload, as fewer irrelevant articles are passed to the human reviewers. It is defined as:
+\textbf{Specificity} (or selectivity) measures the proportion of irrelevant studies that were correctly excluded. A higher specificity indicates a greater reduction in the manual screening workload, as fewer irrelevant articles are passed to the human reviewers. It is defined as:
 \begin{equation}
     \text{Specificity} = \frac{\text{True Negatives (TN)}}{\text{True Negatives (TN)} + \text{False Positives (FP)}}
 \end{equation}

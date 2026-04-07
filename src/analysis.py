@@ -384,7 +384,7 @@ def generate_results_figure(results_list, mean_recall, mean_specificity, output_
 
     # Format graph grid layout
     ax.legend()
-    ax.set_ylim([0, 1.4])
+    ax.set_ylim([0, 1.35])
     ax.set_axisbelow(True)
     ax.yaxis.grid(True, linestyle='--', alpha=0.7, color='gray')
 
@@ -396,7 +396,7 @@ def generate_results_figure(results_list, mean_recall, mean_specificity, output_
             # Check if this is the last bar ("Overall Mean")
             weight = 'bold' if i == len(rects) - 1 else 'normal'
 
-            ax.annotate(f'{height:.4f}',
+            ax.annotate(f'{height:.3f}',
                         xy=(rect.get_x() + rect.get_width() / 2, height),
                         xytext=(0, 4),  # 4 points vertical offset
                         textcoords="offset points",
@@ -451,8 +451,11 @@ for dataset_name, library_list in datasets_to_process.items():
         generate_latex_table(latex_results, TABLES_OUTPUT_DIR, dataset_name)
         generate_statistical_summary_table(latex_results, TABLES_OUTPUT_DIR, dataset_name)
 
+        mean_recall = np.mean([res['recall'] for res in all_results])
+        mean_specificity = np.mean([res['specificity'] for res in all_results])
+
         if dataset_name == "Evaluation":
-            generate_results_figure(latex_results, TABLES_OUTPUT_DIR, dataset_name)
+            generate_results_figure(latex_results, mean_recall, mean_specificity, FIGURES_OUTPUT_DIR, dataset_name)
 
     print("\n" + "="*50 + "\n")
 
