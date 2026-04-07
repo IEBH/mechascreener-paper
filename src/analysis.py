@@ -1,5 +1,7 @@
 import json
 import os
+import csv
+import math
 from pathlib import Path
 import numpy as np
 import matplotlib.pyplot as plt
@@ -72,6 +74,22 @@ GROUND_TRUTH_SUFFIX = "references.json"
 
 # --- End Configuration ---
 
+def wilson_ci(x, n, z=1.96):
+    """
+    Calculates the Wilson Score Interval for a proportion.
+    Robust for extreme proportions (e.g., 100% recall) where Wald intervals fail.
+    """
+    if n == 0:
+        return 0.0, 0.0
+    p = x / n
+    denominator = 1 + z**2 / n
+    centre_adjusted_p = p + z**2 / (2 * n)
+    adjusted_std = z * math.sqrt((p * (1 - p) / n) + (z**2 / (4 * n**2)))
+
+    lower = (centre_adjusted_p - adjusted_std) / denominator
+    upper = (centre_adjusted_p + adjusted_std) / denominator
+    return max(0.0, lower), min(1.0, upper)
+
 def get_sort_key(library_name):
     """Sort based on the exact index of the library in configuration arrays to ensure Non-RCT grouping at the end."""
     if library_name in developmentLibraryNames:
@@ -127,17 +145,14 @@ def calculate_stats(prediction_file: Path, ground_truth_file: Path, threshold: i
             continue
 
         predicted_score = None
-        if isinstance(prediction_data, dict):
-            if not prediction_data: continue
-            try:
-                predicted_score = int(max(prediction_data, key=prediction_data.get))
-            except Exception: continue
+        if isinstance(prediction_data, dict) and prediction_data:
+            try: predicted_score = int(max(prediction_data, key=prediction_data.get))
+            except: continue
         elif isinstance(prediction_data, (int, float)):
             predicted_score = int(prediction_data)
         elif isinstance(prediction_data, str):
-            try:
-                predicted_score = int(float(prediction_data))
-            except ValueError: continue
+            try: predicted_score = int(float(prediction_data))
+            except: continue
         else:
             continue
 
@@ -148,34 +163,29 @@ def calculate_stats(prediction_file: Path, ground_truth_file: Path, threshold: i
         if actual_include and predicted_include: tp += 1
         elif not actual_include and predicted_include: fp += 1
         elif not actual_include and not predicted_include: tn += 1
-        elif actual_include and not predicted_include:
-            fn += 1
+        elif actual_include and not predicted_include: fn += 1
 
-    # Check for division by zero
     actual_positives = tp + fn
-    recall = tp / actual_positives if actual_positives > 0 else 0.0
-
     actual_negatives = tn + fp
-    specificity = tn / actual_negatives if actual_negatives > 0 else 0.0
-
-    predicted_positives = tp + fp
-    precision = tp / predicted_positives if predicted_positives > 0 else 0.0
-
-    f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
-
     total_classified = tp + tn + fp + fn
+    predicted_positives = tp + fp
+
+    recall = tp / actual_positives if actual_positives > 0 else 0.0
+    specificity = tn / actual_negatives if actual_negatives > 0 else 0.0
+    precision = tp / predicted_positives if predicted_positives > 0 else 0.0
+    f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
     accuracy = (tp + tn) / total_classified if total_classified > 0 else 0.0
 
+    # Calculate Wilson 95% Confidence Intervals
+    recall_ci = wilson_ci(tp, actual_positives)
+    spec_ci = wilson_ci(tn, actual_negatives)
+
     return {
-        'recall': recall,
-        'false_negatives': fn,
-        'false_positives': fp,
-        'true_negatives': tn,
-        'true_positives': tp,
-        'specificity': specificity,
-        'precision': precision,
-        'f1_score': f1_score,
-        'accuracy': accuracy,
+        'recall': recall, 'recall_ci': recall_ci,
+        'specificity': specificity, 'spec_ci': spec_ci,
+        'precision': precision, 'f1_score': f1_score,
+        'false_negatives': fn, 'false_positives': fp,
+        'true_negatives': tn, 'true_positives': tp,
         'total_refs': total_classified,
         'actual_positives': actual_positives,
         'actual_negatives': actual_negatives
@@ -277,7 +287,6 @@ def generate_latex_table(results_list, output_dir, dataset_name):
     table_body = "\n".join(rows)
 
     latex_content = fr"""
-% X column expands to fill space, r=right align, c=center align
 \begin{{tabularx}}{{\textwidth}}{{@{{}} X r r r @{{}}}}
 \toprule
 \textbf{{Library Name}} &
@@ -289,45 +298,59 @@ def generate_latex_table(results_list, output_dir, dataset_name):
 \bottomrule
 \end{{tabularx}}
 """
+    output_path = output_dir / f"results_table_{dataset_name.lower()}.tex"
+    with open(output_path, "w") as f: f.write(latex_content.strip())
 
-    # Save file using the dataset name (Development / Evaluation)
-    filename = f"results_table_{dataset_name.lower()}.tex"
-    output_path = output_dir / filename
-    with open(output_path, "w") as f:
-        f.write(latex_content.strip())
-
-    print(f"  -> LaTeX breakdown table saved to: {output_path}")
-
-def generate_mean_summary_table(results_list, mean_recall, mean_specificity, output_dir, dataset_name):
-    """Generates a summary table with recall and specificity for each library, plus the overall mean."""
-
-    # Sort results
-    sorted_results = sorted(results_list, key=lambda x: get_sort_key(x['library_name']))
-
+def generate_statistical_summary_table(results_list, output_dir, dataset_name):
+    results_list.sort(key=lambda x: get_sort_key(x['library_name']))
     rows = []
-    for res in sorted_results:
+
+    pooled_tp = pooled_fp = pooled_tn = pooled_fn = 0
+    macro_recall, macro_spec = [], []
+
+    for res in results_list:
         lib_name = format_library_name(res['library_name'])
-        rows.append(f"{lib_name} & {res['recall']:.4f} & {res['specificity']:.4f} \\\\")
+        r, r_ci = res['recall'], res['recall_ci']
+        s, s_ci = res['specificity'], res['spec_ci']
+
+        rows.append(f"{lib_name} & {r:.3f} ({r_ci[0]:.3f}-{r_ci[1]:.3f}) & {s:.3f} ({s_ci[0]:.3f}-{s_ci[1]:.3f}) \\\\")
+
+        pooled_tp += res['true_positives']
+        pooled_fn += res['false_negatives']
+        pooled_fp += res['false_positives']
+        pooled_tn += res['true_negatives']
+        macro_recall.append(r)
+        macro_spec.append(s)
+
+    mean_r, mean_s = np.mean(macro_recall), np.mean(macro_spec)
+
+    micro_total_pos = pooled_tp + pooled_fn
+    micro_total_neg = pooled_tn + pooled_fp
+    micro_total = micro_total_pos + micro_total_neg
+
+    micro_r = pooled_tp / micro_total_pos if micro_total_pos > 0 else 0
+    micro_s = pooled_tn / micro_total_neg if micro_total_neg > 0 else 0
+
+    micro_r_ci = wilson_ci(pooled_tp, micro_total_pos)
+    micro_s_ci = wilson_ci(pooled_tn, micro_total_neg)
 
     table_body = "\n".join(rows)
 
     latex_content = fr"""
-\begin{{tabularx}}{{\textwidth}}{{@{{}} X r r @{{}}}}
+\begin{{tabularx}}{{\textwidth}}{{@{{}} X c c c @{{}}}}
 \toprule
-\textbf{{Library Name}} & \textbf{{Recall}} & \textbf{{Specificity}} \\
+\textbf{{Library Name}} & \textbf{{Recall (95\% CI)}} & \textbf{{Specificity (95\% CI)}} \\
 \midrule
 {table_body}
 \midrule
-\textbf{{Mean}} & \textbf{{{mean_recall:.4f}}} & \textbf{{{mean_specificity:.4f}}} \\
+\textbf{{Macro-Average (Mean)}} & \textbf{{{mean_r:.3f}}} & \textbf{{{mean_s:.3f}}} \\
+\textbf{{Pooled (Micro-Average)}} & \textbf{{{micro_r:.3f} ({micro_r_ci[0]:.3f}-{micro_r_ci[1]:.3f})}} & \textbf{{{micro_s:.3f} ({micro_s_ci[0]:.3f}-{micro_s_ci[1]:.3f})}} \\
 \bottomrule
 \end{{tabularx}}
 """
-    filename = f"mean_results_table_{dataset_name.lower()}.tex"
-    output_path = output_dir / filename
-    with open(output_path, "w") as f:
-        f.write(latex_content.strip())
-
-    print(f"  -> LaTeX mean summary table saved to: {output_path}")
+    output_path = output_dir / f"statistical_summary_{dataset_name.lower()}.tex"
+    with open(output_path, "w") as f: f.write(latex_content.strip())
+    print(f"  -> LaTeX statistical summary table saved to: {output_path}")
 
 def generate_results_figure(results_list, mean_recall, mean_specificity, output_dir, dataset_name):
     """Generates a bar chart showing Recall and Specificity for each library + the overall mean."""
@@ -394,11 +417,7 @@ def generate_results_figure(results_list, mean_recall, mean_specificity, output_
 
 # --- Main execution loop ---
 print("Starting analysis for all libraries...\n")
-
-# Generate the missing abstracts table
-print("=== Generating Context Tables ===")
 generate_missing_abstracts_table(TABLES_OUTPUT_DIR)
-print("")
 
 # Grouping datasets to loop through them easily
 datasets_to_process = {
@@ -408,25 +427,12 @@ datasets_to_process = {
 
 for dataset_name, library_list in datasets_to_process.items():
     print(f"=== Processing {dataset_name} Set ===")
-
-    all_results = [] # List to store metrics dictionaries
-    latex_results = [] # List specifically for table generation
+    all_results, latex_results = [], []
 
     for library_name in library_list:
-        # Construct paths
-        prediction_filename = f"{library_name}{PREDICTION_SUFFIX}"
-        ground_truth_filename = f"{library_name}/{GROUND_TRUTH_SUFFIX}"
-
-        current_prediction_file = PREDICTION_BASE_DIR / prediction_filename
-        current_ground_truth_file = GROUND_TRUTH_BASE_DIR / ground_truth_filename
-
-        # Calculate metrics
-        metrics = calculate_stats(
-            prediction_file=current_prediction_file,
-            ground_truth_file=current_ground_truth_file,
-            threshold=2,
-            library_name=library_name
-        )
+        current_prediction_file = PREDICTION_BASE_DIR / f"{library_name}{PREDICTION_SUFFIX}"
+        current_ground_truth_file = GROUND_TRUTH_BASE_DIR / f"{library_name}/{GROUND_TRUTH_SUFFIX}"
+        metrics = calculate_stats(current_prediction_file, current_ground_truth_file, 2, library_name)
 
         if metrics:
             all_results.append(metrics)
@@ -443,30 +449,10 @@ for dataset_name, library_list in datasets_to_process.items():
     # --- Generate LaTeX Table for this dataset ---
     if latex_results:
         generate_latex_table(latex_results, TABLES_OUTPUT_DIR, dataset_name)
+        generate_statistical_summary_table(latex_results, TABLES_OUTPUT_DIR, dataset_name)
 
-    # --- Calculate and Print Mean Statistics ---
-    if not all_results:
-        print(f"\nNo libraries were processed successfully for {dataset_name}.")
-    else:
-        num_libraries_processed = len(all_results)
-        print(f"\n  --- Mean Statistics ({dataset_name} Set, {num_libraries_processed} Libraries) ---")
-
-        mean_recall = np.mean([res['recall'] for res in all_results])
-        mean_specificity = np.mean([res['specificity'] for res in all_results])
-        mean_precision = np.mean([res['precision'] for res in all_results])
-        mean_f1_score = np.mean([res['f1_score'] for res in all_results])
-        mean_accuracy = np.mean([res['accuracy'] for res in all_results])
-
-        print(f"  Mean Recall:             {mean_recall:.4f}")
-        print(f"  Mean Specificity:        {mean_specificity:.4f}")
-        print(f"  Mean Precision:          {mean_precision:.4f}")
-        print(f"  Mean F1 Score:           {mean_f1_score:.4f}")
-        print(f"  Mean Accuracy:           {mean_accuracy:.4f}")
-
-        # Update table outputs + figures
-        generate_mean_summary_table(latex_results, mean_recall, mean_specificity, TABLES_OUTPUT_DIR, dataset_name)
         if dataset_name == "Evaluation":
-            generate_results_figure(latex_results, mean_recall, mean_specificity, FIGURES_OUTPUT_DIR, dataset_name)
+            generate_results_figure(latex_results, TABLES_OUTPUT_DIR, dataset_name)
 
     print("\n" + "="*50 + "\n")
 
