@@ -59,6 +59,21 @@ CITATION_MAP = {
     "non_rct_sanitation_diarrhoea": "non_rct_sanitation_diarrhoea",
 }
 
+# Map libraries to their study Author and Year for the CSV output
+STUDY_METADATA_MAP = {
+    # Evaluation Libraries
+    "balneotherapy_for_chronic_venous": {"author": "de Moraes Silva", "year": 2023},
+    "calcium_vitamin_d_for_bones": {"author": "Méndez-Sánchez", "year": 2023},
+    "methylxanthine_for_apnea": {"author": "Marques", "year": 2023},
+    "phosphodiestrase_5_inhibitors": {"author": "Maltez", "year": 2023},
+    "topical_and_oral_steroids_for_om": {"author": "Mulvaney", "year": 2023},
+    "non_rct_covid_schools": {"author": "Littlecott", "year": 2024},
+    "non_rct_diabetes_tb": {"author": "Franco", "year": 2024},
+    "non_rct_falls_prevention": {"author": "Lewis", "year": 2024},
+    "non_rct_fluoride_fluorosis": {"author": "Wong", "year": 2024},
+    "non_rct_sanitation_diarrhoea": {"author": "Bauza", "year": 2023},
+}
+
 # Optional map for custom display names in final outputs (tables and figures)
 DISPLAY_NAME_MAP = {
     "non_rct_covid_schools": "COVID-19 Measures in Schools",
@@ -414,6 +429,37 @@ def generate_results_figure(results_list, mean_recall, mean_specificity, output_
 
     print(f"  -> Figure saved to: {output_path}")
 
+def generate_csv_results(results_list, output_dir, dataset_name):
+    if dataset_name.lower() == 'development':
+        # Don't generate csv for development results
+        return
+    """Generates a CSV file for the evaluation metrics based on exact formatting criteria."""
+    output_path = output_dir / f"{dataset_name.lower()}_metabayesdta_results.csv"
+
+    with open(output_path, mode='w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+
+        # Write case-sensitive columns headers exactly as requested
+        writer.writerow(['author', 'year', 'TP', 'FN', 'FP', 'TN'])
+
+        for res in results_list:
+            lib_name = res['library_name']
+
+            # Lookup unique author and year from map; default uniquely if not found
+            metadata = STUDY_METADATA_MAP.get(lib_name, {"author": f"{format_library_name(lib_name)} Group", "year": 2023})
+
+            author = metadata['author']
+            year = metadata['year']
+            # Add 1/2 to each cell to prevent failure to converge when FN is 0
+            # https://doi.org/10.1002/sim.4780040405
+            tp = res['true_positives']
+            fn = res['false_negatives']
+            fp = res['false_positives']
+            tn = res['true_negatives']
+
+            writer.writerow([author, year, tp, fn, fp, tn])
+
+    print(f"  -> CSV table saved to: {output_path}")
 
 # --- Main execution loop ---
 print("Starting analysis for all libraries...\n")
@@ -446,10 +492,14 @@ for dataset_name, library_list in datasets_to_process.items():
         else:
             print(f"  [✗] Skipped: {library_name}")
 
-    # --- Generate LaTeX Table for this dataset ---
+    # --- Generate LaTeX/CSV Tables and figures for this dataset ---
     if latex_results:
+        # Sort results logically for consistent outputs
+        latex_results.sort(key=lambda x: get_sort_key(x['library_name']))
+
         generate_latex_table(latex_results, TABLES_OUTPUT_DIR, dataset_name)
         generate_statistical_summary_table(latex_results, TABLES_OUTPUT_DIR, dataset_name)
+        generate_csv_results(latex_results, TABLES_OUTPUT_DIR, dataset_name)
 
         mean_recall = np.mean([res['recall'] for res in all_results])
         mean_specificity = np.mean([res['specificity'] for res in all_results])
