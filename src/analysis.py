@@ -328,7 +328,7 @@ def generate_statistical_summary_table(results_list, output_dir, dataset_name):
         r, r_ci = res['recall'], res['recall_ci']
         s, s_ci = res['specificity'], res['spec_ci']
 
-        rows.append(f"{lib_name} & {r:.3f} ({r_ci[0]:.3f}-{r_ci[1]:.3f}) & {s:.3f} ({s_ci[0]:.3f}-{s_ci[1]:.3f}) \\\\")
+        rows.append(f"{lib_name} & {r:.2f} ({r_ci[0]:.2f}-{r_ci[1]:.2f}) & {s:.2f} ({s_ci[0]:.2f}-{s_ci[1]:.2f}) \\\\")
 
         pooled_tp += res['true_positives']
         pooled_fn += res['false_negatives']
@@ -358,8 +358,8 @@ def generate_statistical_summary_table(results_list, output_dir, dataset_name):
 \midrule
 {table_body}
 \midrule
-\textbf{{Macro-Average (Mean)}} & \textbf{{{mean_r:.3f}}} & \textbf{{{mean_s:.3f}}} \\
-\textbf{{Pooled (Micro-Average)}} & \textbf{{{micro_r:.3f} ({micro_r_ci[0]:.3f}-{micro_r_ci[1]:.3f})}} & \textbf{{{micro_s:.3f} ({micro_s_ci[0]:.3f}-{micro_s_ci[1]:.3f})}} \\
+\textbf{{Macro-Average (Mean)}} & \textbf{{{mean_r:.2f}}} & \textbf{{{mean_s:.2f}}} \\
+\textbf{{Pooled (Micro-Average)}} & \textbf{{{micro_r:.2f} ({micro_r_ci[0]:.2f}-{micro_r_ci[1]:.2f})}} & \textbf{{{micro_s:.2f} ({micro_s_ci[0]:.2f}-{micro_s_ci[1]:.2f})}} \\
 \bottomrule
 \end{{tabularx}}
 """
@@ -411,7 +411,7 @@ def generate_results_figure(results_list, mean_recall, mean_specificity, output_
             # Check if this is the last bar ("Overall Mean")
             weight = 'bold' if i == len(rects) - 1 else 'normal'
 
-            ax.annotate(f'{height:.3f}',
+            ax.annotate(f'{height:.2f}',
                         xy=(rect.get_x() + rect.get_width() / 2, height),
                         xytext=(0, 4),  # 4 points vertical offset
                         textcoords="offset points",
