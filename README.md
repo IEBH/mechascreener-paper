@@ -132,12 +132,14 @@ All data is stored in `data/` and managed via Git LFS.
 If you use MechaScreener or this analysis code in your research, please cite:
 
 ```bibtex
-@article{forbes2024mechascreener,
+@article{forbes2026mechascreener,
   title={MechaScreener: Large Language Model-Based Automated Screening for Systematic Reviews and Research},
-  author={Forbes, Connor and Carter, Matt and Clark, Justin},
-  journal={Working Paper},
-  year={2024},
-  url={https://github.com/IEBH/mechascreener-paper}
+  author={Forbes, Connor and Carter, Matt and Hudson, Carly and Glasziou, Paul and Clark, Justin},
+  journal={medRxiv},
+  year={2026},
+  publisher={Cold Spring Harbor Laboratory Press},
+  doi={10.64898/2026.04.28.26352009},
+  url={https://doi.org/10.64898/2026.04.28.26352009}
 }
 ```
 
