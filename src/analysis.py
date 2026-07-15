@@ -105,6 +105,31 @@ def wilson_ci(x, n, z=1.96):
     upper = (centre_adjusted_p + adjusted_std) / denominator
     return max(0.0, lower), min(1.0, upper)
 
+# Addresses Reviewer 1 Comment 4 and Reviewer 2 Comment 5 (clustering):
+# Records are clustered within reviews, so a record-level (micro) confidence
+# interval that treats every record as independent understates uncertainty.
+# This cluster bootstrap resamples whole REVIEWS (with replacement) and
+# recomputes the macro-average (mean of per-review proportions), yielding a
+# 95% interval that reflects between-review heterogeneity rather than assuming
+# the ~58,000 records are independent observations.
+def cluster_bootstrap_ci(per_review_values, n_boot=10000, seed=42, z_ci=(2.5, 97.5)):
+    """
+    Percentile cluster-bootstrap CI for the macro-average of a per-review metric.
+    Resamples reviews (the clustering unit) with replacement.
+    Returns (lower, upper). Degenerate (e.g. all reviews == 1.00) collapses to a point.
+    """
+    values = np.asarray(per_review_values, dtype=float)
+    k = len(values)
+    if k == 0:
+        return 0.0, 0.0
+    rng = np.random.default_rng(seed)
+    means = np.empty(n_boot)
+    for b in range(n_boot):
+        sample = rng.choice(values, size=k, replace=True)
+        means[b] = sample.mean()
+    lower, upper = np.percentile(means, z_ci)
+    return max(0.0, float(lower)), min(1.0, float(upper))
+
 def get_sort_key(library_name):
     """Sort based on the exact index of the library in configuration arrays to ensure Non-RCT grouping at the end."""
     if library_name in developmentLibraryNames:
@@ -206,6 +231,85 @@ def calculate_stats(prediction_file: Path, ground_truth_file: Path, threshold: i
         'actual_negatives': actual_negatives
     }
 
+# Addresses Reviewer 2 Comment 7: quantify how many true negatives / false positives
+# come from references published AFTER the source review was conducted. Such records
+# could not have been screened by the original review authors, yet MechaScreener screens
+# them and (under our ground-truth rule) treats them as "exclude". We use each review's
+# publication year (from STUDY_METADATA_MAP) as a conservative cutoff: a record whose
+# publication year is strictly greater than the review's publication year was certainly
+# published after the review's search. This reports the percentage of all TN and all FP
+# in the evaluation set that are attributable to these post-publication records.
+def compute_post_publication_impact(threshold=2):
+    """Prints the share of evaluation-set TN and FP contributed by post-publication records."""
+    total_tn = total_fp = 0
+    post_tn = post_fp = 0
+
+    for lib in evaluationLibraryNames:
+        review_year = STUDY_METADATA_MAP.get(lib, {}).get("year")
+        if review_year is None:
+            continue
+
+        gt_file = GROUND_TRUTH_BASE_DIR / f"{lib}/{GROUND_TRUTH_SUFFIX}"
+        pred_file = PREDICTION_BASE_DIR / f"{lib}{PREDICTION_SUFFIX}"
+        try:
+            with open(gt_file, 'r') as f:
+                ground_truth = json.load(f)
+            with open(pred_file, 'r') as f:
+                predictions = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            continue
+
+        for ref_id, ref_data in ground_truth.items():
+            prediction_data = predictions.get(ref_id)
+            if prediction_data is None or prediction_data == "not screened":
+                continue
+            if not isinstance(ref_data, dict):
+                continue
+
+            # Only excluded (ground-truth negative) records can be TN or FP
+            include_val = str(ref_data.get("include", "")).lower() == "true"
+            if include_val:
+                continue
+
+            # Resolve predicted score
+            score = None
+            if isinstance(prediction_data, dict) and prediction_data:
+                try: score = int(max(prediction_data, key=prediction_data.get))
+                except: continue
+            elif isinstance(prediction_data, (int, float)):
+                score = int(prediction_data)
+            elif isinstance(prediction_data, str):
+                try: score = int(float(prediction_data))
+                except: continue
+            if score is None:
+                continue
+
+            is_true_negative = score < threshold
+            if is_true_negative:
+                total_tn += 1
+            else:
+                total_fp += 1
+
+            # Determine publication year
+            try:
+                pub_year = int(str(ref_data.get("year"))[:4])
+            except (TypeError, ValueError):
+                continue
+
+            if pub_year > review_year:
+                if is_true_negative:
+                    post_tn += 1
+                else:
+                    post_fp += 1
+
+    tn_pct = 100 * post_tn / total_tn if total_tn else 0.0
+    fp_pct = 100 * post_fp / total_fp if total_fp else 0.0
+    print("  -> Post-publication record impact (Reviewer 2 Comment 7):")
+    print(f"     TN: {post_tn:,}/{total_tn:,} ({tn_pct:.1f}% of all true negatives)")
+    print(f"     FP: {post_fp:,}/{total_fp:,} ({fp_pct:.1f}% of all false positives)")
+    return {"post_tn": post_tn, "total_tn": total_tn, "tn_pct": tn_pct,
+            "post_fp": post_fp, "total_fp": total_fp, "fp_pct": fp_pct}
+
 def generate_missing_abstracts_table(output_dir):
     """Generates a table splitting RCT and Non-RCT, counting total refs and missing abstracts."""
     rct_rows = []
@@ -265,6 +369,55 @@ def generate_missing_abstracts_table(output_dir):
     with open(output_path, "w") as f:
         f.write(latex_content.strip())
     print(f"  -> LaTeX missing abstracts table saved to: {output_path}")
+
+# Addresses Reviewer 2 Comment 6: reports the distribution of the 1-5 ordinal
+# relevance scores for each evaluation library so readers can see how the score
+# is used in practice (rather than assuming it is a calibrated probability).
+def generate_score_distribution_table(library_list, output_dir, dataset_name):
+    """Generates a LaTeX table of the count of each ordinal score (1-5) per library."""
+    rows = []
+    for lib in library_list:
+        pred_file = PREDICTION_BASE_DIR / f"{lib}{PREDICTION_SUFFIX}"
+        counts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+        try:
+            with open(pred_file, 'r') as f:
+                predictions = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            continue
+
+        for ref_id, prediction_data in predictions.items():
+            if prediction_data == "not screened":
+                continue
+            score = None
+            if isinstance(prediction_data, dict) and prediction_data:
+                try: score = int(max(prediction_data, key=prediction_data.get))
+                except: continue
+            elif isinstance(prediction_data, (int, float)):
+                score = int(prediction_data)
+            elif isinstance(prediction_data, str):
+                try: score = int(float(prediction_data))
+                except: continue
+            if score in counts:
+                counts[score] += 1
+
+        name = format_library_name(lib)
+        row = f"{name} & {counts[1]:,} & {counts[2]:,} & {counts[3]:,} & {counts[4]:,} & {counts[5]:,} \\\\"
+        rows.append(row)
+
+    table_body = "\n".join(rows)
+    latex_content = fr"""
+\begin{{tabularx}}{{\textwidth}}{{@{{}} X r r r r r @{{}}}}
+\toprule
+\textbf{{Library Name}} & \textbf{{Score 1}} & \textbf{{Score 2}} & \textbf{{Score 3}} & \textbf{{Score 4}} & \textbf{{Score 5}} \\
+\midrule
+{table_body}
+\bottomrule
+\end{{tabularx}}
+"""
+    output_path = output_dir / f"score_distribution_{dataset_name.lower()}.tex"
+    with open(output_path, "w") as f:
+        f.write(latex_content.strip())
+    print(f"  -> LaTeX score distribution table saved to: {output_path}")
 
 def generate_latex_table(results_list, output_dir, dataset_name):
     """Generates and saves a LaTeX table based on the results."""
@@ -349,6 +502,17 @@ def generate_statistical_summary_table(results_list, output_dir, dataset_name):
     micro_r_ci = wilson_ci(pooled_tp, micro_total_pos)
     micro_s_ci = wilson_ci(pooled_tn, micro_total_neg)
 
+    # Addresses Reviewer 1 Comment 4 and Reviewer 2 Comment 5:
+    # Cluster-aware (between-review) 95% CIs for the macro-average, plus a
+    # review-level "zero missed includes" estimand for recall. The latter
+    # answers "what is the probability of zero misses in a new review?" by
+    # treating each review (not each record) as the unit of analysis.
+    n_reviews = len(macro_recall)
+    macro_r_ci = cluster_bootstrap_ci(macro_recall)
+    macro_s_ci = cluster_bootstrap_ci(macro_spec)
+    reviews_zero_miss = sum(1 for r in macro_recall if r >= 1.0)
+    zero_miss_ci = wilson_ci(reviews_zero_miss, n_reviews)
+
     table_body = "\n".join(rows)
 
     latex_content = fr"""
@@ -358,8 +522,9 @@ def generate_statistical_summary_table(results_list, output_dir, dataset_name):
 \midrule
 {table_body}
 \midrule
-\textbf{{Macro-Average (Mean)}} & \textbf{{{mean_r:.2f}}} & \textbf{{{mean_s:.2f}}} \\
-\textbf{{Pooled (Micro-Average)}} & \textbf{{{micro_r:.2f} ({micro_r_ci[0]:.2f}-{micro_r_ci[1]:.2f})}} & \textbf{{{micro_s:.2f} ({micro_s_ci[0]:.2f}-{micro_s_ci[1]:.2f})}} \\
+\textbf{{Macro-Average (per-review mean)}} & \textbf{{{mean_r:.2f} ({macro_r_ci[0]:.2f}-{macro_r_ci[1]:.2f})}} & \textbf{{{mean_s:.2f} ({macro_s_ci[0]:.2f}-{macro_s_ci[1]:.2f})}} \\
+\textbf{{Pooled (Micro-Average, per-record)}} & \textbf{{{micro_r:.2f} ({micro_r_ci[0]:.2f}-{micro_r_ci[1]:.2f})}} & \textbf{{{micro_s:.2f} ({micro_s_ci[0]:.2f}-{micro_s_ci[1]:.2f})}} \\
+\textbf{{Reviews with zero missed includes}} & \textbf{{{reviews_zero_miss}/{n_reviews} ({zero_miss_ci[0]:.2f}-{zero_miss_ci[1]:.2f})}} & \textbf{{--}} \\
 \bottomrule
 \end{{tabularx}}
 """
@@ -464,6 +629,7 @@ def generate_csv_results(results_list, output_dir, dataset_name):
 # --- Main execution loop ---
 print("Starting analysis for all libraries...\n")
 generate_missing_abstracts_table(TABLES_OUTPUT_DIR)
+compute_post_publication_impact()
 
 # Grouping datasets to loop through them easily
 datasets_to_process = {
@@ -506,6 +672,8 @@ for dataset_name, library_list in datasets_to_process.items():
 
         if dataset_name == "Evaluation":
             generate_results_figure(latex_results, mean_recall, mean_specificity, FIGURES_OUTPUT_DIR, dataset_name)
+            # Addresses Reviewer 2 Comment 6: ordinal score distribution for the supplement
+            generate_score_distribution_table(library_list, TABLES_OUTPUT_DIR, dataset_name)
 
     print("\n" + "="*50 + "\n")
 

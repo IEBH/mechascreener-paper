@@ -6,6 +6,8 @@
 \usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{tabularx}
 
 \geometry{margin=1in}
 
@@ -179,5 +181,61 @@ Include a study if it meets ALL of the following criteria:
     \item[Outcome:] prevalence of diarrhoea
     \item[Type of study:] ``randomised controlled trials'' OR ``quasi-RCTs'' OR ``non-RCTs'' OR ``controlled before and after studies'' OR ``matched cohort studies''
 \end{description}
+
+% Addresses Reviewer 2 Comment 1: reproduce the verbatim system prompt and prompt structure, as the backend is not publicly available
+\section{System Prompt and Prompt Structure}
+For every reference, MechaScreener sends the LLM a fixed system prompt followed by a user prompt into which the user's eligibility criteria and the reference's title and abstract are inserted verbatim. The assistant response is prefilled with the token \texttt{Score:} so that the model returns only a single ordinal value. The exact templates used in this study (with the score range set to 1--5) are reproduced below; text in square brackets denotes the fields substituted at runtime.
+
+\vspace{0.5em}
+\noindent\textbf{System prompt:}
+\begin{quote}
+\begin{verbatim}
+You are a research assistant tasked with evaluating the relevance of
+research articles based on their title and abstract. You will score the
+relevance on a scale of 1 to 5, where 1 is completely irrelevant and 5
+is highly relevant. Consider all aspects of the given criteria when
+determining the score. Provide only your score with no explanation.
+\end{verbatim}
+\end{quote}
+
+\noindent\textbf{User prompt:}
+\begin{quote}
+\begin{verbatim}
+The criteria for this research project are:
+[USER-PROVIDED ELIGIBILITY CRITERIA]
+
+Title of the research article:
+[TITLE]
+
+Abstract of the research article:
+[ABSTRACT]
+
+Your response must follow this exact structure: Score:[1-5]
+\end{verbatim}
+\end{quote}
+
+\noindent\textbf{Prefilled assistant response:} \texttt{Score:}
+
+% Addresses Reviewer 1 Comment 5: provide a screenshot of the MechaScreener interface for readers without a TERA account
+\section{MechaScreener Interface}
+The MechaScreener tool is provided through the Evidence Review Accelerator (TERA), which requires a free account. To allow readers and reviewers to assess the usability of the system without signing up, Figure~\ref{fig:screenshot} shows the MechaScreener interface. Users upload their reference library, enter their eligibility criteria (in PICOT format or as free-text inclusion/exclusion rules), and the tool returns an ordinal relevance score (1--5) for each reference.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{../assets/example_screenshot.png}
+\caption{Screenshot of the MechaScreener interface within TERA.}
+\label{fig:screenshot}
+\end{figure}
+
+% Addresses Reviewer 2 Comment 6: report the distribution of the 1-5 ordinal relevance scores per evaluation library
+\section{Distribution of Ordinal Relevance Scores}
+Table~\ref{tab:score-distribution} reports the number of references assigned each ordinal relevance score (1--5) by MechaScreener in each of the 10 evaluation libraries. The 1--5 value is used as an ordinal ranking rather than a calibrated probability; the inclusion threshold used throughout the study excludes only references scored 1. The distributions are typically right-skewed toward low scores, consistent with most references in a search being irrelevant to the review question.
+
+\begin{table}[ht]
+\centering
+\caption{Distribution of Ordinal Relevance Scores Across the 10 Evaluation Libraries}
+\label{tab:score-distribution}
+\input{tables/score_distribution_evaluation.tex}
+\end{table}
 
 \end{document}
