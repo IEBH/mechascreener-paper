@@ -2,10 +2,12 @@
 
 [![Institute](https://img.shields.io/badge/Institute-IEBH-blue)](https://bond.edu.au/research/institute-evidence-based-healthcare)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://img.shields.io/badge/DOI-10.17605%2FOSF.IO%2FU43M2-blue)](https://doi.org/10.17605/OSF.IO/U43M2)
 
 **Authors:** Connor Forbes, Matt Carter, Carly Hudson, Paul Glasziou, Justin Clark
 **Status:** Under review (revision 1) at *Research Synthesis Methods*
 **Preprint:** [https://doi.org/10.64898/2026.04.28.26352009](https://doi.org/10.64898/2026.04.28.26352009)
+**Archive:** [https://doi.org/10.17605/OSF.IO/U43M2](https://doi.org/10.17605/OSF.IO/U43M2) (OSF)
 
 This repository contains the source code, data analysis pipelines, and LaTeX files for the paper *"MechaScreener: Large Language Model-Based Automated Screening for Systematic Reviews and Research"*.
 
