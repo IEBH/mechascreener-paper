@@ -3,9 +3,9 @@
 [![Institute](https://img.shields.io/badge/Institute-IEBH-blue)](https://bond.edu.au/research/institute-evidence-based-healthcare)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Authors:** Connor Forbes, Matt Carter, Justin Clark
-**Status:** Draft
-**Link:** Not submitted
+**Authors:** Connor Forbes, Matt Carter, Carly Hudson, Paul Glasziou, Justin Clark
+**Status:** Under review (revision 1) at *Research Synthesis Methods*
+**Preprint:** [https://doi.org/10.64898/2026.04.28.26352009](https://doi.org/10.64898/2026.04.28.26352009)
 
 This repository contains the source code, data analysis pipelines, and LaTeX files for the paper *"MechaScreener: Large Language Model-Based Automated Screening for Systematic Reviews and Research"*.
 
@@ -69,7 +69,7 @@ sudo apt install python3-venv make texlive-latex-extra texlive-science texlive-b
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/connorf25/mechascreener-paper.git
+    git clone https://github.com/IEBH/mechascreener-paper.git
     cd mechascreener-paper
     ```
 
