@@ -52,7 +52,7 @@ The analysis script expects the following JSON structure:
 
 To build this paper, you need the following software installed on your system:
 
-- **Python 3.8+**
+- **Python 3.10+** (the pinned dependencies in `requirements.txt` require at least 3.10)
 - **GNU Make**
 - **LaTeX Distribution** (TeX Live recommended)
 - **latexmk** (for automated LaTeX builds)
