@@ -76,6 +76,8 @@ STUDY_METADATA_MAP = {
 
 # Optional map for custom display names in final outputs (tables and figures)
 DISPLAY_NAME_MAP = {
+    "phosphodiestrase_5_inhibitors": "Phosphodiesterase 5 Inhibitors",
+    "topical_and_oral_steroids_for_om": "Topical and Oral Steroids for OME",
     "non_rct_covid_schools": "COVID-19 Measures in Schools",
     "non_rct_diabetes_tb": "Diabetes as a TB Risk Factor",
     "non_rct_falls_prevention": "Falls Interventions",
